@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
@@ -698,6 +698,141 @@
       color: var(--g-blue);
       border: 1px solid var(--g-blue-border);
     }
+
+    /* USE CASE SHOWCASE */
+    .usecase-layout {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .usecase-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .usecase-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .usecase-card {
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+      text-align: left;
+      width: 100%;
+      font-family: inherit;
+      border: 1px solid var(--border-std);
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 15px 17px;
+      cursor: pointer;
+      transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .usecase-card:hover {
+      border-color: var(--g-blue);
+      box-shadow: 0 2px 10px rgba(26,115,232,0.08);
+    }
+
+    .usecase-card.active {
+      border-color: var(--g-blue);
+      background: var(--g-blue-bg);
+      box-shadow: 0 2px 10px rgba(26,115,232,0.10);
+    }
+
+    .usecase-card .uc-icon {
+      font-size: 19px;
+      line-height: 1.35;
+      flex-shrink: 0;
+    }
+
+    .usecase-card .uc-name {
+      font-size: 14.8px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+      margin-bottom: 3px;
+    }
+
+    .usecase-card .uc-sub {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .usecase-preview {
+      border: 1px solid var(--border-std);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .usecase-visual {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-light);
+      padding: 18px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .usecase-visual svg {
+      width: 100%;
+      max-width: 430px;
+      height: auto;
+      display: block;
+    }
+
+    .usecase-body {
+      padding: 20px 22px 22px;
+    }
+
+    .uc-prompt {
+      background: var(--g-blue-bg);
+      border: 1px solid var(--g-blue-border);
+      border-radius: 10px;
+      padding: 12px 15px;
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--text-body);
+      margin-bottom: 16px;
+    }
+
+    .uc-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 7px;
+    }
+
+    .uc-results {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--text-body);
+    }
+
+    .uc-results li {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+    }
+
+    .uc-results li::before {
+      content: '\2713';
+      color: var(--g-green);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -712,6 +847,7 @@
     </div>
 
     <nav class="header-nav">
+      <a href="#usecases" data-ko="&#xd65c;&#xc6a9; &#xc0ac;&#xb840;" data-en="Use Cases">&#xd65c;&#xc6a9; &#xc0ac;&#xb840;</a>
       <a href="#overview" data-ko="1. &#xc791;&#xb3d9; &#xbc29;&#xc2dd;" data-en="1. Workflow">1. &#xc791;&#xb3d9; &#xbc29;&#xc2dd;</a>
       <a href="#surfaces" data-ko="2. &#xc81c;&#xd488; &#xad6c;&#xc131;" data-en="2. Surfaces">2. &#xc81c;&#xd488; &#xad6c;&#xc131;</a>
       <a href="#features" data-ko="3. &#xd575;&#xc2ec; &#xae30;&#xb2a5;" data-en="3. Capabilities">3. &#xd575;&#xc2ec; &#xae30;&#xb2a5;</a>
@@ -736,327 +872,437 @@
     let activeStep = 0;
     let activeSurface = 0;
     let activeTier = 0;
+    let activeUseCase = 0;
 
     const contentPack = {
       ko: {
-        heroBadge: 'Google Antigravity \u2022 Gemini Enterprise \uae30\ubc18 \uae30\uc5c5 \ub3c4\uc785 \uc548\ub0b4',
-        heroTitle: '\ucf54\ub4dc \uc790\ub3d9\uc644\uc131\uc744 \ub118\uc5b4\uc120 \uc5d0\uc774\uc804\ud2b8 \uc911\uc2ec(Agent-First) \uac1c\ubc1c \ud50c\ub7ab\ud3fc',
-        heroLead: '<strong>Google Antigravity</strong>\ub294 Google\uc758 <strong>\uc5d0\uc774\uc804\ud2b8 \uae30\ubc18 \uc18c\ud504\ud2b8\uc6e8\uc5b4 \uac1c\ubc1c \ud50c\ub7ab\ud3fc</strong>\uc785\ub2c8\ub2e4. \uc0ac\uc6a9\uc790\uac00 \ubaa9\ud45c\ub97c \uc81c\uc2dc\ud558\uba74, \uc790\uc728\ud615 \uc5d0\uc774\uc804\ud2b8\uac00 \uacc4\ud68d \uc218\ub9bd\ubd80\ud130 \uad6c\ud604\uacfc \uac80\uc99d\uae4c\uc9c0 \uc804 \uacfc\uc815\uc744 \uc9c1\uc811 \uc218\ud589\ud569\ub2c8\ub2e4.',
-        heroLeadSub: '<strong>Gemini Enterprise</strong>\ub85c \uc5f0\uacb0\ud558\uba74 \ud68c\uc0ac \uacc4\uc815 \ub85c\uadf8\uc778 \ud558\ub098\ub85c \uc911\uc559 \uad00\ub9ac\uc790 \ud1b5\uc81c\uc640 Google Cloud \uc11c\ube44\uc2a4 \uc57d\uad00, \ud300 \ub2e8\uc704 \uc0ac\uc6a9\ub7c9 \uad00\ub9ac\uac00 \ud568\uaed8 \uc801\uc6a9\ub429\ub2c8\ub2e4.',
+        heroBadge: 'Google Antigravity • Gemini Enterprise 기반 기업 도입 안내',
+        heroTitle: '코드 자동완성을 넘어선 에이전트 중심(Agent-First) 개발 플랫폼',
+        heroLead: '<strong>Google Antigravity</strong>는 사용자가 원하는 목표를 일상 언어로 설명하면, 자율형 에이전트가 <strong>계획 수립(Plan)부터 실제 제작·실행(Act), 브라우저 화면 검증(Verify)</strong>까지 전 과정을 직접 수행하는 플랫폼입니다.',
+        heroLeadSub: '개발자뿐만 아니라 <strong>코딩이 익숙하지 않은 기획자·마케터·일반 실무자</strong>도 내 PC의 엑셀 파일로 대시보드를 만들거나 HTML 기반의 다이내믹한 슬라이드를 손쉽게 제작할 수 있으며, <strong>Gemini Enterprise</strong>를 통해 기업 보안 약관과 중앙 관리 기준 아래 안전하게 운영됩니다.',
         heroFlow: [
-          { name: 'Plan \u00b7 \uacc4\ud68d', desc: '\uc791\uc5c5 \uc804 \uad6c\ud604 \uacc4\ud68d\uc11c\ub97c \uc791\uc131\ud574 \uc0ac\ub78c\uc758 \uc2b9\uc778\uc744 \uba3c\uc800 \ubc1b\uc2b5\ub2c8\ub2e4.' },
-          { name: 'Act \u00b7 \uc2e4\ud589', desc: '\uc5ec\ub7ec \ud30c\uc77c\uc744 \ub3d9\uc2dc\uc5d0 \uc218\uc815\ud558\uace0 \ud130\ubbf8\ub110\uc5d0\uc11c \ud14c\uc2a4\ud2b8\ub97c \uc2e4\ud589\ud569\ub2c8\ub2e4.' },
-          { name: 'Verify \u00b7 \uac80\uc99d', desc: '\ub0b4\uc7a5 \ube0c\ub77c\uc6b0\uc800\ub85c \uc2e4\uc81c \ud654\uba74\uacfc \ub3d9\uc791\uc744 \uc9c1\uc811 \ud655\uc778\ud558\uace0 \ubcf4\uace0\ud569\ub2c8\ub2e4.' }
+          { name: 'Plan · 계획', desc: '작업 전 어떻게 만들지 계획서를 먼저 작성해 사람의 확인을 받습니다.' },
+          { name: 'Act · 실행', desc: '승인된 계획에 맞춰 화면·파일을 직접 만들고 오류를 스스로 점검합니다.' },
+          { name: 'Verify · 검증', desc: '내장 브라우저로 완성된 화면을 직접 열어 동작을 확인하고 보고합니다.' }
         ],
-        heroTrackHeading: '\uae30\uc5c5 \ud2b8\ub799\uacfc \uac1c\uc778 \ud2b8\ub799\uc740 \uc5b4\ub5bb\uac8c \ub2e4\ub978\uac00\uc694',
-        compLeftTitle: '\ud83d\udc64 \uac1c\uc778 \ud2b8\ub799 (\ucc38\uace0)',
-        compLeftBody: '\uac1c\uc778 Google \uacc4\uc815\uc73c\ub85c \ubc14\ub85c \uc2dc\uc791\ud560 \uc218 \uc788\ub294 \ud50c\ub79c\uc785\ub2c8\ub2e4. \uac19\uc740 \uc5d0\uc774\uc804\ud2b8 \uc5d4\uc9c4\uc744 \uc0ac\uc6a9\ud558\uc9c0\ub9cc \uac1c\uc778\uc6a9 \uc57d\uad00\uc774 \uc801\uc6a9\ub418\uba70, <strong>\uc911\uc559 \uad00\ub9ac\uc790 \ud1b5\uc81c\uc640 \uc870\uc9c1 \ub2e8\uc704 \uc0ac\uc6a9\ub7c9 \uad00\ub9ac\ub294 \uc81c\uacf5\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.</strong>',
-        compRightTitle: '\ud83c\udfe2 \uae30\uc5c5 \ud2b8\ub799 \u2014 \uad8c\uc7a5 \ub3c4\uc785 \ubc29\uc2dd (Google Cloud / Gemini Enterprise)',
-        compRightBody: '\uc870\uc9c1 \uc804\uccb4 \ubc30\ud3ec\ub97c \uc804\uc81c\ub85c \uc124\uacc4\ub41c \ub3c4\uc785 \ubc29\uc2dd\uc785\ub2c8\ub2e4. \uc784\uc9c1\uc6d0\uc774 <strong>\ud68c\uc0ac Google Cloud \uacc4\uc815</strong>\uc73c\ub85c \ub85c\uadf8\uc778\ud574 \ub370\uc2a4\ud06c\ud1b1 \uc571\u00b7IDE \ud655\uc7a5\u00b7CLI\ub97c \uadf8\ub300\ub85c \uc0ac\uc6a9\ud569\ub2c8\ub2e4.<br/><br/>\u2022 Google Cloud \uc11c\ube44\uc2a4 \uc57d\uad00 (\uace0\uac1d \ucf54\ub4dc \ube44\ud559\uc2b5)<br/>\u2022 Cloud Console \uae30\ubc18 \uc911\uc559 \uad00\ub9ac\uc790 \ud1b5\uc81c<br/>\u2022 \ud300 \ub2e8\uc704 \uc0ac\uc6a9\ub7c9 \uacf5\uc720 \ubc0f \uc9c0\ucd9c \ud55c\ub3c4',
+        ucNum: 'Use Cases • 활용 사례',
+        ucTitle: '언제 Antigravity를 사용할까요?',
+        ucIntro: '코딩 경험이 없는 기획자·마케터부터 전문 개발자까지, 내 PC의 파일과 한 줄의 지시만으로 만들 수 있는 대표 결과물입니다. 아래 항목을 눌러 실제 요청 문장과 결과 화면을 확인해 보세요.',
+        ucPromptLabel: '이렇게 말하면 됩니다',
+        ucResultLabel: '에이전트가 만들어 주는 결과물',
+        useCases: [
+          {
+            icon: '📊',
+            visual: 'dashboard',
+            name: '엑셀 파일로 인터랙티브 대시보드 제작',
+            sub: '정적인 표 데이터를 클릭해서 볼 수 있는 웹 대시보드로',
+            prompt: '“이번 분기 매출 엑셀 파일(sales_q3.xlsx)을 읽어서 지역별·제품별로 필터링해 볼 수 있는 대시보드를 만들어 줘.”',
+            results: [
+              '핵심 실적 요약 카드와 지역·제품 선택 필터 자동 구성',
+              '마우스를 올리면 수치가 보이는 인터랙티브 차트 생성',
+              '보고서 첨부용 차트 이미지 저장 기능 포함'
+            ]
+          },
+          {
+            icon: '🎞️',
+            visual: 'slides',
+            name: 'HTML 기반의 다이내믹한 슬라이드 제작',
+            sub: '땅땅한 문서 대신 움직이는 웹 발표 자료로',
+            prompt: '“이 기획안 문서를 바탕으로 페이지가 부드럽게 전환되고 차트가 움직이는 발표용 웹 슬라이드로 만들어 줘.”',
+            results: [
+              '표지·본문·마무리 구성의 전체화면 슬라이드 제작',
+              '페이지 전환 애니메이션 및 반응형 차트 적용',
+              '별도 프로그램 설치 없이 브라우저로 바로 발표 가능'
+            ]
+          },
+          {
+            icon: '🚀',
+            visual: 'prototype',
+            name: '아이디어를 클릭 가능한 시제품으로',
+            sub: '손그림 스케치 한 장이 직접 동작하는 화면으로',
+            prompt: '“이 스케치처럼 사내 신청 앱 화면을 만들고, 버튼을 누르면 다음 화면으로 넘어가게 해 줘.”',
+            results: [
+              '기획안이나 스케치를 읽고 실제 화면 레이아웃 구성',
+              '버튼 클릭 시 화면이 이동하는 프로토타입(MVP) 제작',
+              '링크 하나로 팀원·상위 보고 시 직접 시연 가능'
+            ]
+          },
+          {
+            icon: '🗂️',
+            visual: 'report',
+            name: '파일 일괄 정리 및 정기 리포트 자동화',
+            sub: '매주 반복하던 취합·요약 업무를 예약 실행으로',
+            prompt: '“이 폴더 안 주간 보고 파일들을 하나로 취합해 요약해 주고, 매주 월요일 아침에 자동으로 실행되게 해 줘.”',
+            results: [
+              '폴더 안 여러 문서·데이터 파일을 원하는 양식으로 취합',
+              '핵심 내용만 뽑아낸 요약 리포트 자동 생성',
+              '예약 실행(/schedule)으로 주간·월간 반복 수행'
+            ]
+          }
+        ],
+        heroTrackHeading: '기업 트랙과 개인 트랙은 어떻게 다른가요',
+        compLeftTitle: '👤 개인 트랙 (참고)',
+        compLeftBody: '개인 Google 계정으로 바로 시작할 수 있는 플랜입니다. 같은 에이전트 엔진을 사용하지만 개인용 약관이 적용되며, <strong>중앙 관리자 통제와 조직 단위 사용량 관리는 제공되지 않습니다.</strong>',
+        compRightTitle: '🏢 기업 트랙 — 권장 도입 방식 (Google Cloud / Gemini Enterprise)',
+        compRightBody: '조직 전체 배포를 전제로 설계된 도입 방식입니다. 임직원이 <strong>회사 Google Cloud 계정</strong>으로 로그인해 데스크톱 앱·IDE 확장·CLI를 그대로 사용합니다.<br/><br/>• Google Cloud 서비스 약관 (고객 데이터·코드 비학습)<br/>• Cloud Console 기반 중앙 관리자 통제<br/>• 팀 단위 사용량 공유 및 지출 한도',
 
-        s1Num: 'Section 01 \u2022 \uc791\ub3d9 \ubc29\uc2dd',
-        s1Title: '\uacc4\ud68d \uc2b9\uc778(Plan) \u00b7 \uc790\uc728 \uc2e4\ud589(Act) \u00b7 \ube0c\ub77c\uc6b0\uc800 \uac80\uc99d(Verify) \u2014 \uc138 \ub2e8\uacc4\ub85c \ud1b5\uc81c\uad8c\uc744 \uc720\uc9c0\ud569\ub2c8\ub2e4',
-        s1Intro: '\uc790\uc728 \uc5d0\uc774\uc804\ud2b8\ub97c \ub3c4\uc785\ud560 \ub54c \ud604\uc5c5\uc5d0\uc11c \uac00\uc7a5 \uc911\uc694\ud558\uac8c \uc5ec\uae30\ub294 \uac83\uc740 \uc791\uc5c5\uc5d0 \ub300\ud55c \ud1b5\uc81c\uad8c\uc785\ub2c8\ub2e4. Antigravity\ub294 \ubaa8\ub4e0 \uc791\uc5c5\uc744 3\ub2e8\uacc4 \uc2b9\uc778\u00b7\uac80\uc99d \ub8e8\ud504\ub85c \uad6c\uc870\ud654\ud574, \uc5d0\uc774\uc804\ud2b8\uc758 \uc791\uc5c5 \uc18d\ub3c4\uc640 \uc0ac\uc6a9\uc790\uc758 \ud1b5\uc81c\ub825\uc744 \ub3d9\uc2dc\uc5d0 \ud655\ubcf4\ud569\ub2c8\ub2e4.',
+        s1Num: 'Section 01 • 작동 방식',
+        s1Title: '계획 승인(Plan) · 자율 실행(Act) · 브라우저 검증(Verify) — 세 단계로 쉽고 안전하게 진행합니다',
+        s1Intro: '코딩을 잘 모르더라도 걱정할 필요가 없습니다. Antigravity는 모든 작업을 3단계 확인 루프로 진행해, 사용자가 방향만 잡아주면 에이전트가 복잡한 구현과 화면 점검을 알아서 마무리합니다.',
         steps: [
           {
-            name: '1\ub2e8\uacc4: \uc0ac\uc804 \uc124\uacc4 \uc2b9\uc778 (Plan)',
-            sub: '\ucf54\ub4dc \ubcc0\uacbd \uc804 \uc544\ud0a4\ud14d\ucc98\u00b7\uc601\ud5a5\ub3c4 \uc0ac\uc804 \ud569\uc758',
-            youTitle: '\ud83d\udc64 \uc5d4\uc9c0\ub2c8\uc5b4 / \uc124\uacc4\uc790\uc758 \uc5ed\ud560:',
-            youText: '\uad6c\ud604\ud560 \uc694\uad6c\uc0ac\ud56d\uc744 \uc790\uc5f0\uc5b4(\ud14d\uc2a4\ud2b8 \ub610\ub294 \uc74c\uc131)\ub85c \uc9c0\uc2dc\ud55c \ub4a4, \uc5d0\uc774\uc804\ud2b8\uac00 \uc81c\ucd9c\ud55c <strong>\uad6c\ud604 \uacc4\ud68d\uc11c(Implementation Plan) \uc544\ud2f0\ud329\ud2b8</strong>\ub97c \uac80\ud1a0\ud569\ub2c8\ub2e4. \ubcf4\uc644\uc774 \ud544\uc694\ud55c \ubd80\ubd84\uc740 Google Docs\ucc98\ub7fc \ud2b9\uc815 \uc904\uc5d0 \uc778\ub77c\uc778 \ucf54\uba58\ud2b8\ub97c \ub0a8\uaca8 \uc218\uc815 \uc9c0\uc2dc\ud55c \ud6c4 <code>[Proceed]</code>\ub97c \ub20c\ub7ec \uc2e4\ud589\uc744 \uc2b9\uc778\ud569\ub2c8\ub2e4.',
-            agentTitle: '\ud83e\udd16 Antigravity \uc5d0\uc774\uc804\ud2b8\uc758 \ub3d9\uc791:',
-            agentText: '\uc18c\uc2a4\ucf54\ub4dc\ub97c \uc784\uc758\ub85c \uc218\uc815\ud558\uae30 \uc804\uc5d0 \ub808\ud3ec\uc9c0\ud1a0\ub9ac \uad6c\uc870\uc640 \uc758\uc874\uc131\uc744 \uba3c\uc800 \ubd84\uc11d\ud569\ub2c8\ub2e4. \uc218\uc815 \ub300\uc0c1 \ud30c\uc77c, API \uc2a4\ud0a4\ub9c8 \ubcc0\uacbd\uc548, \ud14c\uc2a4\ud2b8 \uc2dc\ub098\ub9ac\uc624\ub97c \uc815\ub9ac\ud55c \uacc4\ud68d\uc11c \uc544\ud2f0\ud329\ud2b8\ub97c \uc0dd\uc131\ud574 \uc0ac\uc804 \ud569\uc758\ub97c \uc694\uccad\ud569\ub2c8\ub2e4.',
-            exTitle: '\uc2e4\ubb34 \ud654\uba74 \uc608\uc2dc: \uad6c\ud604 \uacc4\ud68d\uc11c(Implementation Plan) \uc778\ub77c\uc778 \ub9ac\ubdf0',
-            exBody: `<b>\uc694\uad6c\uc0ac\ud56d \uc9c0\uc2dc:</b> "\uc8fc\ubb38 \uad00\ub9ac \ud654\uba74\uc5d0 \uad8c\uc5ed\ubcc4 \ud544\ud130\ub9c1\uacfc \ub300\uc6a9\ub7c9 CSV \ub0b4\ubcf4\ub0b4\uae30 \uae30\ub2a5\uc744 \ucd94\uac00\ud574 \uc918."<br/><br/>
-            <b>\uc5d0\uc774\uc804\ud2b8 \uc0ac\uc804 \uc124\uacc4\uc548:</b><br/>
-            \u2022 <code>OrderController.java</code>: \uad8c\uc5ed \ud544\ud130 \ud30c\ub77c\ubbf8\ud130 \ubc0f \uc2a4\ud2b8\ub9ac\ubc0d CSV \ub2e4\uc6b4\ub85c\ub4dc \uc5d4\ub4dc\ud3ec\uc778\ud2b8 \ucd94\uac00<br/>
-            \u2022 <code>OrdersTable.tsx</code>: \uc0c1\ub2e8 \ud544\ud130 \ubc14\uc5d0 \uad8c\uc5ed \uc120\ud0dd \ucef4\ud3ec\ub10c\ud2b8 \ubc0f \ub2e4\uc6b4\ub85c\ub4dc \uc561\uc158 \uc5f0\ub3d9<br/>
-            \u2022 <b>\uac80\uc99d \uacc4\ud68d:</b> JUnit \ud1b5\ud569 \ud14c\uc2a4\ud2b8 6\uac74 \uc218\ud589 \ud6c4 \ub0b4\uc7a5 \ube0c\ub77c\uc6b0\uc800\uc5d0\uc11c \uc2e4\uc81c \ud30c\uc77c \ub2e4\uc6b4\ub85c\ub4dc\u00b7\ub80c\ub354\ub9c1 \ud655\uc778<br/><br/>
-            <span style="color:var(--g-blue);font-weight:600;">\ud83d\udcac \uc5d4\uc9c0\ub2c8\uc5b4 \uc778\ub77c\uc778 \ucf54\uba58\ud2b8: "\uc77c\uc790 \ud3ec\ub9f7\uc740 \uc0ac\ub0b4 \ud45c\uc900(YYYY-MM-DD)\uc744 \uc801\uc6a9\ud558\uace0, \uae30\uc874 \uc0ac\ub0b4 AuthGuard \uad8c\ud55c \uac80\uc99d \uc5b4\ub178\ud14c\uc774\uc158\uc744 \uc7ac\uc0ac\uc6a9\ud560 \uac83."</span>`
+            name: '1단계: 작업 계획 확인 (Plan)',
+            sub: '만들기 전에 화면 구성과 진행 방향을 먼저 합의',
+            youTitle: '👤 사용자 (기획자 · 실무자 · 개발자)의 역할:',
+            youText: '원하는 결과물을 일상적인 말(텍스트 또는 음성)로 요청한 뒤, 에이전트가 먼저 정리해 온 <strong>작업 계획서(Plan)</strong>를 가볍게 읽어봅니다. 추가하고 싶은 내용은 문서에 댓글을 달듯 적어주고 <code>[Proceed]</code> 버튼을 눌러 진행을 승인합니다.',
+            agentTitle: '🤖 Antigravity 에이전트의 동작:',
+            agentText: '바로 파일을 만들거나 고치지 않고, 먼저 사용자가 지정한 파일(엑셀, 기획 문서 등)을 파악한 뒤 어떤 화면과 기능을 어떤 순서로 만들지 알기 쉽게 계획서로 정리해 보여줍니다.',
+            exTitle: '쉬운 활용 예시: 엑셀 파일로 인터랙티브 대시보드 & 슬라이드 만들기',
+            exBody: `<b>사용자 요청:</b> "이번 분기 매출 엑셀 파일(sales_q3.xlsx)을 읽어서, 지역별·제품별로 클릭해 볼 수 있는 대시보드와 발표용 다이내믹 슬라이드 화면을 만들어 줘."<br/><br/>
+            <b>에이전트가 먼저 제안한 계획서:</b><br/>
+            • <b>데이터 정리:</b> 엑셀 시트의 지역·제품·월별 실적 표를 자동으로 읽어 차트용 데이터로 변환<br/>
+            • <b>화면 구성:</b> ① 핵심 실적 요약 카드, ② 지역·제품 선택 필터와 추이 차트, ③ 발표용 전체화면 슬라이드 보기 모드 제작<br/>
+            • <b>확인 계획:</b> 제작 후 내장 브라우저로 화면을 직접 띄워 필터와 슬라이드 전환이 잘 되는지 점검<br/><br/>
+            <span style="color:var(--g-blue);font-weight:600;">💬 사용자 한 줄 코멘트: "좋아요! 차트 색상은 회사 브랜드 블루 톤으로 맞추고, 보고서 첨부용 '차트 이미지 저장' 버튼도 추가해 주세요."</span>`
           },
           {
-            name: '2\ub2e8\uacc4: \ubc31\uadf8\ub77c\uc6b4\ub4dc \uc790\uc728 \uc2e4\ud589 (Act)',
-            sub: '\uba40\ud2f0 \ud30c\uc77c \uc218\uc815\u00b7\ud130\ubbf8\ub110 \ud14c\uc2a4\ud2b8\u00b7\ud558\uc704 \uc5d0\uc774\uc804\ud2b8 \ubcd1\ub82c\ud654',
-            youTitle: '\ud83d\udc64 \uc5d4\uc9c0\ub2c8\uc5b4 / \uc124\uacc4\uc790\uc758 \uc5ed\ud560:',
-            youText: '\uc124\uacc4\uc548\uc744 \uc2b9\uc778\ud55c \ub4a4 \ub2e4\ub978 \ud575\uc2ec \uc124\uacc4 \uc5c5\ubb34\ub97c \uc9c4\ud589\ud558\uac70\ub098, <strong>Antigravity 2.0 \ub370\uc2a4\ud06c\ud1b1 \uc571</strong>\uc5d0\uc11c \uc5ec\ub7ec \uc5d0\uc774\uc804\ud2b8\uc758 \uc791\uc5c5 \uc9c4\ud589 \ud604\ud669\uc744 \ub300\uc2dc\ubcf4\ub4dc\ub85c \ubaa8\ub2c8\ud130\ub9c1\ud569\ub2c8\ub2e4.',
-            agentTitle: '\ud83e\udd16 Antigravity \uc5d0\uc774\uc804\ud2b8\uc758 \ub3d9\uc791:',
-            agentText: '\uc2b9\uc778\ub41c \uacc4\ud68d\uc5d0 \ub9de\ucdb0 \ub2e4\uc911 \ud30c\uc77c \uc218\uc815\uacfc \ud130\ubbf8\ub110 \ube4c\ub4dc\u00b7\ud14c\uc2a4\ud2b8\ub97c \uc790\uc728 \uc218\ud589\ud569\ub2c8\ub2e4(\ud130\ubbf8\ub110 \uc790\ub3d9 \uc2e4\ud589 \ubaa8\ub4dc\uc640 \uc0cc\ub4dc\ubc15\uc2a4 \ud65c\uc131\ud654 \uc5ec\ubd80\ub294 \uad00\ub9ac\uc790 \ubc0f \uc6cc\ud06c\uc2a4\ud398\uc774\uc2a4 \uc815\ucc45\uc73c\ub85c \uc9c0\uc815\ub418\uba70, OS \ub124\uc774\ud2f0\ube0c \uc0cc\ub4dc\ubc15\uc2a4\ub294 macOS\u00b7Linux \uae30\ubcf8 \uc9c0\uc6d0, Windows\ub294 Preview). \ucef4\ud30c\uc77c \uc624\ub958 \ubc1c\uc0dd \uc2dc \ub85c\uadf8\ub97c \uc77d\uace0 \uc2a4\uc2a4\ub85c \ud328\uce58\ud558\uba70, \ub300\uaddc\ubaa8 \uacfc\uc81c\ub294 <strong>\ud558\uc704 \uc5d0\uc774\uc804\ud2b8(Subagents)</strong>\ub97c \uc0dd\uc131\ud574 \ubcd1\ub82c\ub85c \ucc98\ub9ac\ud569\ub2c8\ub2e4.',
-            exTitle: '\uc2e4\ubb34 \ud654\uba74 \uc608\uc2dc: \ud558\uc704 \uc5d0\uc774\uc804\ud2b8 \ubd84\uc5c5 \ubc0f \ud130\ubbf8\ub110 \uc790\uac00 \uac80\uc99d',
-            exBody: `<b>\uc2e4\uc2dc\uac04 \uc5d0\uc774\uc804\ud2b8 \uc2e4\ud589 \ub0b4\uc5ed:</b><br/>
-            \u2713 <code>OrderController.java</code> \ubc0f <code>OrdersTable.tsx</code> \uad6c\ud604 \ubc18\uc601 \uc644\ub8cc<br/>
-            \u2713 <b>[Subagent: \ud14c\uc2a4\ud2b8 \uc804\ub2f4 \uc5d0\uc774\uc804\ud2b8]</b> <code>OrderExportTest.java</code> \uacbd\uacc4\uac12 \ud14c\uc2a4\ud2b8 6\uac74 \ubcd1\ub82c \uc791\uc131<br/>
-            \u2713 \ud300 \ucf54\ub529 \ud45c\uc900 \uc2a4\ud0ac(<code>SKILL.md</code>) \ubc0f \ubcf4\uc548 \uaddc\uce59 \uc790\ub3d9 \ub300\uc870 \uc644\ub8cc<br/>
-            \u2713 \ud130\ubbf8\ub110 \ube4c\ub4dc \uc2e4\ud589: <b>6/6 \ud14c\uc2a4\ud2b8 \ud1b5\uacfc (BUILD SUCCESSFUL)</b>`
+            name: '2단계: 자율 제작 및 실행 (Act)',
+            sub: '화면 제작·데이터 연결·오류 수정을 에이전트가 스스로 수행',
+            youTitle: '👤 사용자 (기획자 · 실무자 · 개발자)의 역할:',
+            youText: '계획을 승인한 뒤에는 복잡한 제작 과정을 일일이 신경 쓸 필요가 없습니다. 다른 본업에 집중하거나, <strong>Antigravity 2.0 데스크톱 앱</strong>에서 작업이 진행되는 현황만 한눈에 확인하면 됩니다.',
+            agentTitle: '🤖 Antigravity 에이전트의 동작:',
+            agentText: '승인된 계획에 맞춰 웹 대시보드 화면, 차트 애니메이션, 데이터 정리 작업을 스스로 수행합니다. 작업 중 오류가 발생하면 에이전트가 스스로 원인을 찾아 고치며, 할 일이 많을 때는 <strong>보조 에이전트(Subagents)</strong>가 역할을 나누어 동시에 빠르게 처리합니다.',
+            exTitle: '쉬운 활용 예시: 에이전트가 스스로 화면 제작 및 점검 완료',
+            exBody: `<b>실시간 에이전트 작업 내역:</b><br/>
+            ✓ <code>sales_q3.xlsx</code> 엑셀 데이터 분석 및 지역·제품별 자동 집계 완료<br/>
+            ✓ 인터랙티브 웹 대시보드(<code>dashboard.html</code>) 및 다이내믹 슬라이드 뷰 제작 완료<br/>
+            ✓ 요청하신 브랜드 블루 컬러 테마 및 '차트 이미지 저장' 기능 반영 완료<br/>
+            ✓ 자체 점검 결과: <b>데이터 누락 없음 · 모든 차트 및 버튼 정상 구성 완료</b>`
           },
           {
-            name: '3\ub2e8\uacc4: \ube0c\ub77c\uc6b0\uc800 \uc2e4\uc99d \ubcf4\uace0 (Verify)',
-            sub: '\ube0c\ub77c\uc6b0\uc800 \uc11c\ube0c\uc5d0\uc774\uc804\ud2b8 \uae30\ubc18 \uc2e4\uc81c UI \uad6c\ub3d9 \ubc0f \uc2dc\uac01 \uac80\uc99d',
-            youTitle: '\ud83d\udc64 \uc5d4\uc9c0\ub2c8\uc5b4 / \uc124\uacc4\uc790\uc758 \uc5ed\ud560:',
-            youText: '\uc5d0\uc774\uc804\ud2b8\uac00 \uc81c\ucd9c\ud55c <strong>\uc644\ub8cc \ubcf4\uace0\uc11c(Walkthrough \uc544\ud2f0\ud329\ud2b8)</strong>\uc5d0\uc11c \ubcc0\uacbd \uc694\uc57d, \ud14c\uc2a4\ud2b8 \uacb0\uacfc, \ube0c\ub77c\uc6b0\uc800 \uc2a4\ud06c\ub9b0\uc0f7\uacfc \ud654\uba74 \ub179\ud654\ub97c \ud55c\ub208\uc5d0 \ud655\uc778\ud569\ub2c8\ub2e4. UI \uc870\uc815\uc774 \ud544\uc694\ud558\uba74 \uc2a4\ud06c\ub9b0\uc0f7 \uc544\ud2f0\ud329\ud2b8\uc5d0 \uc9c1\uc811 \ucf54\uba58\ud2b8\ub97c \ub0a8\uaca8 \uc7ac\uc791\uc5c5\uc744 \uc9c0\uc2dc\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.',
-            agentTitle: '\ud83e\udd16 Antigravity \uc5d0\uc774\uc804\ud2b8\uc758 \ub3d9\uc791:',
-            agentText: '<strong>\ube0c\ub77c\uc6b0\uc800 \uc11c\ube0c\uc5d0\uc774\uc804\ud2b8</strong>\uac00 \uaca9\ub9ac\ub41c \ud504\ub85c\ud544\uc758 <strong>Chrome \ube0c\ub77c\uc6b0\uc800\ub97c \uc9c1\uc811 \uc5f4\uace0 \uc81c\uc5b4</strong>\ud574 \ub85c\uceec \uc11c\ubc84 \ud654\uba74\uc5d0 \uc811\uc18d\ud569\ub2c8\ub2e4. \ubc84\ud2bc \ud074\ub9ad, \ud3fc \uc785\ub825, \ub80c\ub354\ub9c1 \uc0c1\ud0dc, \ucf58\uc194 \uc624\ub958\ub97c \ud655\uc778\ud55c \ub4a4 \uc2a4\ud06c\ub9b0\uc0f7\u00b7\ud654\uba74 \ub179\ud654\uc640 \uc644\ub8cc \ubcf4\uace0\uc11c(Walkthrough)\ub97c \uc544\ud2f0\ud329\ud2b8\ub85c \uc0dd\uc131\ud569\ub2c8\ub2e4. (Chrome \uc124\uce58 \ubc0f \ub514\ubc84\uae45\u00b7URL \uc811\uadfc \uad8c\ud55c \ud5c8\uc6a9 \ud544\uc694)',
-            exTitle: '\uc2e4\ubb34 \ud654\uba74 \uc608\uc2dc: \ube0c\ub77c\uc6b0\uc800 \uc790\ub3d9 \uad6c\ub3d9 \uac80\uc99d \ubc0f \uc2a4\ud06c\ub9b0\uc0f7 \ud53c\ub4dc\ubc31',
-            exBody: `<b>\ub0b4\uc7a5 \ube0c\ub77c\uc6b0\uc800 \uc2e4\uc99d \uc644\ub8cc (Walkthrough):</b><br/>
-            \ud83c\udf10 <code>http://localhost:3000/orders</code> \uc811\uc18d \ubc0f \uad8c\uc5ed\ubcc4 \ub4dc\ub86d\ub2e4\uc6b4 \ud544\ud130\ub9c1 \ub3d9\uc791 \ud655\uc778<br/>
-            \ud83d\uddb1\ufe0f 'CSV \ub0b4\ubcf4\ub0b4\uae30' \ubc84\ud2bc \ud074\ub9ad \u2192 HTTP 200 \uc751\ub2f5 \ubc0f <code>YYYY-MM-DD</code> \ud3ec\ub9f7 \uc77c\uce58 \uac80\uc99d<br/>
-            \ud83d\udcf8 \ud654\uba74 \ub80c\ub354\ub9c1 \ucea1\ucc98 \ubc0f \ube0c\ub77c\uc6b0\uc800 \ucf58\uc194 \uc5d0\ub7ec 0\uac74 \ud655\uc778 \uc644\ub8cc<br/><br/>
-            <span style="color:var(--g-green);font-weight:600;">\u2705 \uac80\uc99d \uc99d\ube59 \ud655\ubcf4 \u2014 \ubc18\ubcf5\uc801\uc778 \uc218\ub3d9 \ud654\uba74 \ud655\uc778 \ubd80\ub2f4\uc744 \uc904\uc774\uace0 \ucf54\ub4dc \ub9ac\ubdf0\uc5d0 \uc9d1\uc911</span>`
+            name: '3단계: 브라우저 화면 검증 (Verify)',
+            sub: '실제 화면을 띄워 동작을 확인하고 캡처 위에 마우스로 수정 지시',
+            youTitle: '👤 사용자 (기획자 · 실무자 · 개발자)의 역할:',
+            youText: '에이전트가 제출한 <strong>완료 보고서(Walkthrough)</strong>와 완성된 화면 캡처·녹화 영상을 확인합니다. 만약 글자 크기나 배치를 바꾸고 싶다면 코딩 용어를 몰라도 <strong>화면 캡처 위에 마우스로 네모 박스를 그려</strong> 직관적으로 수정을 지시할 수 있습니다.',
+            agentTitle: '🤖 Antigravity 에이전트의 동작:',
+            agentText: '에이전트가 직접 <strong>Chrome 브라우저를 열어</strong> 완성된 대시보드와 슬라이드 화면을 띄우고, 필터 버튼과 탭을 실제로 눌러보며 화면이 깨지지 않는지 확인한 뒤 스크린샷과 화면 녹화를 첨부해 보고합니다.',
+            exTitle: '쉬운 활용 예시: 브라우저 자동 확인 및 화면 위 박스 피드백',
+            exBody: `<b>내장 브라우저 화면 검증 완료 (Walkthrough):</b><br/>
+            🌐 완성된 대시보드 실행 및 지역별·제품별 드롭다운 필터 작동 확인<br/>
+            🖱️ '발표용 슬라이드 모드' 전환 애니메이션 및 '차트 이미지 저장' 동작 확인<br/>
+            📸 완성 화면 스크린샷 캡처 및 시연 녹화 영상 첨부 완료<br/><br/>
+            <span style="color:var(--g-green);font-weight:600;">✅ 검증 완료 — 바로 회의나 보고에 활용 가능하며, 캡처 화면 위에 박스를 그려 손쉽게 추가 수정 가능</span>`
           }
         ],
 
-        s2Num: 'Section 02 \u2022 \uc81c\ud488 \uad6c\uc131',
-        s2Title: '\ud558\ub098\uc758 \uc5d0\uc774\uc804\ud2b8 \uc5d4\uc9c4, \ub124 \uac00\uc9c0 \uc0ac\uc6a9 \ud658\uacbd',
-        s2Intro: 'Antigravity\ub294 \uac1c\ubc1c\ud300\uc5d0\uac8c \ud2b9\uc815 \uc5d0\ub514\ud130 \uad50\uccb4\ub97c \uac15\uc694\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. \ud558\ub098\uc758 \uacf5\ud1b5 \uc5d0\uc774\uc804\ud2b8 \uc5d4\uc9c4\uc774 4\uac00\uc9c0 \uc778\ud130\ud398\uc774\uc2a4\ub85c \uc81c\uacf5\ub418\uc5b4, \ud300\ub9c8\ub2e4 \ub2e4\ub978 \uac1c\ubc1c \ud658\uacbd\uc744 \uadf8\ub300\ub85c \ub454 \ucc44 \uc804\uc0ac \ud45c\uc900\uc744 \uc801\uc6a9\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.',
+        s2Num: 'Section 02 • 제품 구성',
+        s2Title: '하나의 에이전트 엔진, 네 가지 사용 환경',
+        s2Intro: '비개발자 실무자부터 전문 소프트웨어 엔지니어까지 각자 가장 편한 환경을 선택해 사용할 수 있습니다. 하나의 공통 에이전트 엔진이 4가지 환경으로 제공됩니다.',
         surfaceTabs: [
-          '1. Antigravity 2.0 (\ub370\uc2a4\ud06c\ud1b1 \uc571)',
-          '2. \uacf5\uc2dd IDE \ud655\uc7a5 \ud504\ub85c\uadf8\ub7a8',
-          '3. Antigravity CLI (\ud130\ubbf8\ub110)',
+          '1. Antigravity 2.0 (데스크톱 앱)',
+          '2. 공식 IDE 확장 프로그램',
+          '3. Antigravity CLI (터미널)',
           '4. Antigravity Python SDK'
         ],
         surfaces: [
           {
-            who: '\ucd94\ucc9c \ub300\uc0c1: \ubcf5\uc218\uc758 \uc5d0\uc774\uc804\ud2b8\ub97c \ub3d9\uc2dc\uc5d0 \uc9c0\ud718\ud558\ub294 \ub9ac\ub4dc \uc5d4\uc9c0\ub2c8\uc5b4, \ud480\uc2a4\ud0dd \uac1c\ubc1c\uc790, \uae30\uc220 \uae30\ud68d\uc790',
-            title: 'Antigravity 2.0 \ub370\uc2a4\ud06c\ud1b1 \uc571 (\uc5d0\uc774\uc804\ud2b8 \ucee4\ub9e8\ub4dc \uc13c\ud130)',
-            body: 'macOS, Windows, Linux\ub97c \uc9c0\uc6d0\ud558\ub294 \ub3c5\ub9bd\ud615 \uc5d0\uc774\uc804\ud2b8 \uc624\ucf00\uc2a4\ud2b8\ub808\uc774\uc158 \uc560\ud50c\ub9ac\ucf00\uc774\uc158\uc785\ub2c8\ub2e4. \ucf54\ub4dc \uc5d0\ub514\ud130 \uc790\uccb4\uac00 \uc544\ub2c8\ub77c, \uc5ec\ub7ec \ud504\ub85c\uc81d\ud2b8\uc640 Git \uc6cc\ud06c\ud2b8\ub9ac(Worktree)\uc5d0 \uac78\uccd0 \ub2e4\uc218\uc758 \uc5d0\uc774\uc804\ud2b8\ub97c \ubcd1\ub82c\ub85c \uc2e4\ud589\u00b7\uac10\ub3c5\ud558\ub294 \uc911\uc559 \uc9c0\ud718\uc18c \uc5ed\ud560\uc744 \uc218\ud589\ud569\ub2c8\ub2e4.',
+            who: '추천 대상: 코딩 없이 대시보드·슬라이드·시제품을 만들고 싶은 기획자·마케터 및 다중 작업을 지휘하는 개발자',
+            title: 'Antigravity 2.0 데스크톱 앱 (누구나 쉽게 쓰는 에이전트 허브)',
+            body: '복잡한 코딩 도구를 몰라도 일반 PC 프로그램(macOS, Windows, Linux)처럼 설치해 대화하듯 작업할 수 있는 독립형 애플리케이션입니다. 내 컴퓨터의 엑셀·문서 폴더를 열고 말이나 글로 지시하면 대시보드, 다이내믹 HTML 슬라이드, 웹 프로토타입을 바로 만들어 줍니다.',
             points: [
-              '\uccad\uad6c\uc11c \ubc1c\ud589(Invoiced) Cloud Billing \uacc4\uc815\uc774 \uc5f0\uacb0\ub41c Gemini Enterprise(Standard \u00b7 Plus \u00b7 Pay-as-you-go) \uc9c0\uc6d0 \ubc0f Google Cloud \uc11c\ube44\uc2a4 \uc57d\uad00(ToS) \uc801\uc6a9',
-              '\ud504\ub85c\uc81d\ud2b8\ubcc4 \ub300\ud654 \uadf8\ub8f9\ud654, \ub2e4\uc911 \ud3f4\ub354 \ubc0f Git Worktree \uaca9\ub9ac \uc791\uc5c5 \uc9c0\uc6d0',
-              '\ub9c8\uc774\ud06c \uae30\ubc18 \uc790\uc5f0\uc5b4 \uc74c\uc131 \uc9c0\uc2dc(/voice) \ubc0f \ud06c\ub860(Cron) \uae30\ubc18 \uc815\uae30 \uc608\uc57d \uc2e4\ud589(/schedule) \ub0b4\uc7a5'
+              '비개발자 친화적 인터페이스: 음성 지시(/voice), 화면 캡처 위 박스 피드백, 정기 작업 예약(/schedule) 내장',
+              '여러 작업이나 프로젝트를 동시에 띄워두고 에이전트들에게 병렬로 업무를 맡기고 감독하는 중앙 허브 역할',
+              'Gemini Enterprise(Standard · Plus · Pay-as-you-go) 기본 포함 및 Google Cloud 서비스 약관 적용'
             ]
           },
           {
-            who: '\ucd94\ucc9c \ub300\uc0c1: \uc0ac\ub0b4 \ud45c\uc900 IDE(VS Code, Visual Studio, JetBrains \ub4f1) \ud658\uacbd\uc744 \uadf8\ub300\ub85c \uc720\uc9c0\ud558\ub824\ub294 \ud604\uc5c5 \uac1c\ubc1c\ud300',
-            title: '\uacf5\uc2dd IDE \ud655\uc7a5 \ud504\ub85c\uadf8\ub7a8 (Native IDE Extensions)',
-            body: '\uae30\uc874 \uc5d0\ub514\ud130\uc758 \ub2e8\ucd95\ud0a4, \ud50c\ub7ec\uadf8\uc778, \ubcf4\uc548 \uad6c\uc131\uc744 \ubc14\uafb8\uc9c0 \uc54a\uace0\ub3c4 IDE \ub0b4\ubd80\uc758 <strong>\uc5d0\uc774\uc804\ud2b8 \uc0ac\uc774\ub4dc \ud328\ub110</strong>\uc5d0\uc11c Antigravity\uc758 \uacc4\ud68d \uc218\ub9bd\u00b7\uc544\ud2f0\ud329\ud2b8\u00b7\uc5d0\uc774\uc804\ud2b8 \uc2e4\ud589 \uae30\ub2a5\uc744 \uc0ac\uc6a9\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.',
+            who: '추천 대상: 사내 표준 IDE(VS Code, Visual Studio, JetBrains 등) 환경을 그대로 유지하려는 현업 개발팀',
+            title: '공식 IDE 확장 프로그램 (Native IDE Extensions)',
+            body: '기존에 쓰던 코드 에디터의 단축키나 플러그인을 바꾸지 않고도, 에디터 안의 <strong>에이전트 사이드 패널</strong>에서 Antigravity의 계획 수립·파일 수정·검증 기능을 그대로 사용할 수 있습니다.',
             points: [
-              '\uc9c0\uc6d0 \uc5d0\ub514\ud130 \ubc0f \uc694\uad6c \ubc84\uc804: VS Code(1.90+), Visual Studio 2026(v17.8+), JetBrains(2026.2.1+ \u2014 IntelliJ \u00b7 PyCharm \u00b7 WebStorm \u00b7 GoLand \u00b7 CLion \u00b7 Rider), Zed(0.140.0+), Xcode(27 beta 6+)',
-              'Gemini Enterprise \uc778\uc99d \uc0c1\ud0dc: VS Code \u00b7 Visual Studio \uc815\uc2dd \uc9c0\uc6d0, JetBrains \u00b7 Zed \u00b7 Xcode\ub294 \ud504\ub9ac\ubdf0(Preview)',
-              '\uc81c\uacf5 \ubc94\uc704: \uc5d0\uc774\uc804\ud2b8 \uc0ac\uc774\ub4dc \ud328\ub110 \uae30\ub2a5\uc744 \uc81c\uacf5\ud558\uba70, \uc5d0\ub514\ud130 \ub0b4 \uc778\ub77c\uc778 \ud0ed(Tab) \uc790\ub3d9\uc644\uc131\uacfc \uc804\uc6a9 \uc2ac\ub798\uc2dc \ucee4\ub9e8\ub4dc(/schedule \ub4f1)\ub294 \ud3ec\ud568\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4',
-              'Gemini Enterprise \uacc4\uc815 \uc778\uc99d \uc2dc Google Cloud \uc11c\ube44\uc2a4 \uc57d\uad00 \uc801\uc6a9 \u2014 \ucf54\ub4dc\u00b7\ud504\ub86c\ud504\ud2b8\u00b7\uc5d0\uc774\uc804\ud2b8 \ub300\ud654 \uae30\ub85d\uc740 \ubaa8\ub378 \ud559\uc2b5\uc5d0 \uc0ac\uc6a9\ub418\uc9c0 \uc54a\uc74c'
+              '지원 에디터: VS Code, Visual Studio 2026(정식 지원), JetBrains(IntelliJ · PyCharm · WebStorm 등), Zed, Xcode(Preview)',
+              '사이드 패널 중심의 에이전트 협업 환경을 제공하여 기존 개발 워크플로우와 자연스럽게 결합',
+              'Gemini Enterprise 계정 로그인 시 Google Cloud 서비스 약관(코드·프롬프트 비학습) 동일 적용'
             ]
           },
           {
-            who: '\ucd94\ucc9c \ub300\uc0c1: \ud130\ubbf8\ub110 \uc911\uc2ec \ubc31\uc5d4\ub4dc\u00b7\uc778\ud504\ub77c \uc5d4\uc9c0\ub2c8\uc5b4 \ubc0f CI/CD \ud30c\uc774\ud504\ub77c\uc778 \uc790\ub3d9\ud654 \ud300',
-            title: 'Antigravity CLI (agy) \u2014 \uace0\uc18d \uba85\ub839\uc904 \uc778\ud130\ud398\uc774\uc2a4',
-            body: 'GUI \uc5c6\uc774 \ud130\ubbf8\ub110(bash, zsh, PowerShell)\uc5d0\uc11c \ub3d9\uc77c\ud55c \uc5d0\uc774\uc804\ud2b8 \ud558\ub124\uc2a4\ub97c \uc989\uc2dc \uc2e4\ud589\ud558\ub294 \uacbd\ub7c9 CLI \ub3c4\uad6c\uc785\ub2c8\ub2e4.',
+            who: '추천 대상: 터미널 중심 백엔드·인프라 엔지니어 및 반복 빌드·배포 자동화 팀',
+            title: 'Antigravity CLI (agy) — 고속 명령줄 인터페이스',
+            body: '별도 화면 없이 터미널(bash, zsh, PowerShell)에서 `agy` 명령어로 에이전트를 즉시 호출해 반복 작업과 테스트를 자동화하는 경량 도구입니다.',
             points: [
-              'Gemini Enterprise \uae30\ubcf8 \ubc88\ub4e4 \ud3ec\ud568: \ud130\ubbf8\ub110\uc5d0\uc11c agy \uba85\ub839\uc73c\ub85c \uc5d0\uc774\uc804\ud2b8 \uc989\uc2dc \uae30\ub3d9 \ubc0f ADC(\uc560\ud50c\ub9ac\ucf00\uc774\uc158 \uae30\ubcf8 \uc790\uaca9 \uc99d\uba85) \uc778\uc99d \uc9c0\uc6d0',
-              '\ub300\uaddc\ubaa8 \ud504\ub808\uc784\uc6cc\ud06c \ubc84\uc804 \uc5c5\uadf8\ub808\uc774\ub4dc, \ube4c\ub4dc \uae68\uc9d0 \uc790\ub3d9 \ubcf5\uad6c, \ud5e4\ub4dc\ub9ac\uc2a4(Headless) CI/CD \uac80\uc99d\uc5d0 \ucd5c\uc801\ud654',
-              'Antigravity 2.0 \ub370\uc2a4\ud06c\ud1b1 \uc571\uacfc \ub3d9\uc77c\ud55c \ud300 \uc2a4\ud0ac(SKILL.md), \uad8c\ud55c \uc124\uc815, \uc2ac\ub798\uc2dc \ucee4\ub9e8\ub4dc \ubc0f MCP \uc11c\ubc84 \uc124\uc815 \uacf5\uc720'
+              'Gemini Enterprise 기본 번들 포함: 회사 계정 인증으로 터미널에서 즉시 실행 가능',
+              '대규모 버전 업그레이드, 테스트 코드 일괄 생성, 빌드 오류 자동 수정 및 CI/CD 연동에 최적화',
+              '데스크톱 앱과 동일한 팀 표준 스킬(SKILL.md) 및 보안 권한 설정 공유'
             ]
           },
           {
-            who: '\ucd94\ucc9c \ub300\uc0c1: \uc0ac\ub0b4 \uc804\uc6a9 AI \uc5d0\uc774\uc804\ud2b8 \ubc0f \uc5d4\uc9c0\ub2c8\uc5b4\ub9c1 \uc790\ub3d9\ud654 \ud30c\uc774\ud504\ub77c\uc778\uc744 \uc9c1\uc811 \uad6c\ucd95\ud558\ub294 \ud50c\ub7ab\ud3fc \ud300',
+            who: '추천 대상: 사내 전용 AI 자동화 도구나 엔지니어링 파이프라인을 직접 구축하는 플랫폼 팀',
             title: 'Antigravity Python SDK (google-antigravity)',
-            body: '\ud30c\uc774\uc36c \ucf54\ub4dc(pip install google-antigravity)\ub85c Antigravity\uc758 \uc0c1\ud0dc \uc720\uc9c0\ud615(Stateful) \uc5d0\uc774\uc804\ud2b8 \ud558\ub124\uc2a4\ub97c \uc0ac\ub0b4 \uc2dc\uc2a4\ud15c\uc5d0 \uc9c1\uc811 \ub0b4\uc7a5\ud560 \uc218 \uc788\ub294 \ud504\ub85c\uadf8\ub798\ubc0d SDK\uc785\ub2c8\ub2e4.',
+            body: '파이썬 코드로 Antigravity 에이전트를 사내 워크플로우나 자동화 스크립트 안에 직접 내장할 수 있는 개발 키트입니다.',
             points: [
-              '\ud30c\uc774\uc36c \ucf54\ub4dc\ub85c \uc5d0\uc774\uc804\ud2b8\ub97c \uc9c1\uc811 \uad6c\uc131\ud558\uace0 \uc0ac\ub0b4 \uc2dc\uc2a4\ud15c\uc5d0 \ub0b4\uc7a5 (LocalAgentConfig(vertex=True) \uc9c0\uc6d0)',
-              '\ub3c4\uad6c \uc2e4\ud589 \uad8c\ud55c\uacfc \uc0ac\uc804 \uac80\uc0ac \uaddc\uce59\uc744 \ucf54\ub4dc\ub85c \uac15\uc81c\ud574 \uc0ac\ub0b4 \uac70\ubc84\ub10c\uc2a4 \uc801\uc6a9',
-              'Gemini Enterprise Agent Platform API \uae30\ubc18 \uc6b4\uc601 \uc9c0\uc6d0 (\uc88c\uc11d \uad6c\ub3c5\uacfc \ubcc4\ub3c4\ub85c API \uc0ac\uc6a9\ub7c9 \uae30\uc900 \uacfc\uae08)'
+              '파이썬(`pip install google-antigravity`) 기반으로 사내 맞춤형 검증·리뷰 에이전트 구현 가능',
+              '도구 실행 권한과 사전 점검 규칙을 코드로 제어하여 기업 거버넌스 준수',
+              'Gemini Enterprise Agent Platform API 기반 운영 지원 (API 사용량 기준 과금)'
             ]
           }
         ],
-        surfaceCaveat: '<strong>\ud83d\udca1 \uc5d4\ud130\ud504\ub77c\uc774\uc988 \ub3c4\uc785 \uc548\ub0b4 (Antigravity 2.0 vs. \uac1c\uc778\uc6a9 Antigravity IDE):</strong> \ub2e8\ub3c5 \uc5d0\ub514\ud130\uc778 <code>Antigravity IDE</code>(\ud0ed \uc790\ub3d9\uc644\uc131 \ud3ec\ud568)\ub294 \uac1c\uc778 \uc18c\ube44\uc790\uc6a9 \uc57d\uad00(Consumer ToS) \ub300\uc0c1\uc73c\ub85c \uc5d4\ud130\ud504\ub77c\uc774\uc988 \ubc30\ud3ec\ub97c \uc9c0\uc6d0\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. \uae30\uc5c5 \uace0\uac1d\uc740 Google Cloud \uc11c\ube44\uc2a4 \uc57d\uad00(GCP ToS)\uacfc \uc911\uc559 \ubcf4\uc548 \ud1b5\uc81c\uac00 \uc801\uc6a9\ub418\ub294 <strong>\u2460 Antigravity 2.0 \ub370\uc2a4\ud06c\ud1b1 \uc571</strong>, <strong>\u2461 \uae30\uc874 IDE \uacf5\uc2dd \ud655\uc7a5 \ud504\ub85c\uadf8\ub7a8</strong>, <strong>\u2462 Antigravity CLI(<code>agy</code>)</strong> \ubc0f <strong>\u2463 Python SDK</strong>(Agent Platform \uc0ac\uc6a9\ub7c9 \uacfc\uae08)\ub97c \uc0ac\uc6a9\ud569\ub2c8\ub2e4.',
+        surfaceCaveat: '<strong>💡 엔터프라이즈 도입 안내 (Antigravity 2.0 vs. 개인용 Antigravity IDE):</strong> 단독 코드 에디터인 <code>Antigravity IDE</code>는 개인 소비자용 약관 대상으로 기업 배포를 지원하지 않습니다. 기업 고객은 Google Cloud 서비스 약관과 중앙 보안 통제가 적용되는 <strong>① Antigravity 2.0 데스크톱 앱</strong>, <strong>② 기존 IDE 공식 확장 프로그램</strong>, <strong>③ Antigravity CLI(<code>agy</code>)</strong> 및 <strong>④ Python SDK</strong>를 사용합니다.',
 
-        s3Num: 'Section 03 \u2022 \ud575\uc2ec \uae30\ub2a5',
-        s3Title: '\uac1c\ubc1c \uc18c\uc694 \uc2dc\uac04\uc744 \uc904\uc774\ub294 \uc5ec\uc12f \uac00\uc9c0 \uae30\ub2a5',
-        s3Intro: '\ucf54\ub4dc\ub97c \uc791\uc131\ud558\ub294 \ub370\uc11c \uadf8\uce58\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. \uc124\uacc4 \ud569\uc758\ubd80\ud130 \ube0c\ub77c\uc6b0\uc800 \uac80\uc99d, \ud300 \uc9c0\uc2dd \ucd95\uc801\uae4c\uc9c0 \uac1c\ubc1c \uacfc\uc815 \uc804\ubc18\uc744 \uc790\ub3d9\ud654\ud569\ub2c8\ub2e4.',
+        s3Num: 'Section 03 • 핵심 기능',
+        s3Title: '실무 제작과 개발 시간을 줄여주는 여섯 가지 기능',
+        s3Intro: '단순히 코드를 추천하는 도구가 아닙니다. 아이디어 기획부터 시각적인 결과물 완성, 화면 검증까지 전 과정을 알아서 돕습니다.',
         features: [
           {
             num: '01', color: 'var(--g-blue)',
-            title: '\ub2e4\uc911 \uc5d0\uc774\uc804\ud2b8 \ubcd1\ub82c \uc624\ucf00\uc2a4\ud2b8\ub808\uc774\uc158',
-            desc: '\ub2e8\uc77c \uc791\uc5c5\uc774 \ub05d\ub0a0 \ub54c\uae4c\uc9c0 \ub300\uae30\ud560 \ud544\uc694\uac00 \uc5c6\uc2b5\ub2c8\ub2e4. \uc5d0\uc774\uc804\ud2b8 A\uac00 \ubc31\uc5d4\ub4dc API\ub97c \ub9ac\ud329\ud1a0\ub9c1\ud558\ub294 \ub3d9\uc548 \uc5d0\uc774\uc804\ud2b8 B\ub294 \ud504\ub860\ud2b8\uc5d4\ub4dc \ud654\uba74\uc744 \uad6c\uc131\ud558\uace0, \uc5d0\uc774\uc804\ud2b8 C\ub294 \ub2e8\uc704 \ud14c\uc2a4\ud2b8\uc640 \uae30\uc220 \ubb38\uc11c\ub97c \ub3d9\uc2dc\uc5d0 \uc791\uc131\ud569\ub2c8\ub2e4.'
+            title: '여러 작업을 동시에 맡기는 병렬 실행',
+            desc: '하나의 작업이 끝날 때까지 기다릴 필요가 없습니다. 한 에이전트가 엑셀 데이터로 대시보드를 만드는 동안, 다른 에이전트에게 발표용 HTML 슬라이드 제작이나 문서 정리를 동시에 맡길 수 있습니다.'
           },
           {
             num: '02', color: 'var(--g-green)',
-            title: '\ube0c\ub77c\uc6b0\uc800 \uc11c\ube0c\uc5d0\uc774\uc804\ud2b8 \uae30\ubc18 \uc2e4\uc81c \ud654\uba74 \uac80\uc99d',
-            desc: '\uc5d0\uc774\uc804\ud2b8\uac00 \ubcc4\ub3c4 Chrome \ud504\ub85c\ud544\ub85c \ube0c\ub77c\uc6b0\uc800\ub97c \uc9c1\uc811 \uc5f4\uace0 \uc81c\uc5b4\ud574 \ud654\uba74\uc744 \ud074\ub9ad\ud558\uace0 \ud3fc\uc744 \uc785\ub825\ud558\uba70 \ub80c\ub354\ub9c1 \uc0c1\ud0dc\uc640 \ucf58\uc194 \uc624\ub958\ub97c \uc810\uac80\ud569\ub2c8\ub2e4(Chrome \uc124\uce58 \ubc0f \uad00\ub9ac\uc790\u00b7\uc0ac\uc6a9\uc790 \ube0c\ub77c\uc6b0\uc800 \uad8c\ud55c \ud5c8\uc6a9 \ud544\uc694). \uc2a4\ud06c\ub9b0\uc0f7\uacfc \ud654\uba74 \ub179\ud654\uac00 \uc544\ud2f0\ud329\ud2b8\ub85c \uc800\uc7a5\ub418\uc5b4 \ud504\ub860\ud2b8\uc5d4\ub4dc \uac80\uc99d \ubcd1\ubaa9\uc744 \uc904\uc5ec\uc90d\ub2c8\ub2e4.'
+            title: '브라우저를 직접 열어 확인하는 화면 검증',
+            desc: '에이전트가 별도 Chrome 브라우저를 직접 열어 완성된 웹 대시보드나 슬라이드 화면을 클릭해 보고, 화면이 깨지거나 오류가 없는지 점검한 뒤 캡처 사진과 녹화 영상을 남겨줍니다.'
           },
           {
             num: '03', color: 'var(--g-yellow)',
-            title: '\ubb38\uc11c \uc778\ub77c\uc778 \ub313\uae00 & \uc2a4\ud06c\ub9b0\uc0f7 \uc601\uc5ed \ud53c\ub4dc\ubc31',
-            desc: '\uad6c\ud604 \uacc4\ud68d\uc11c\uc758 \ud2b9\uc815 \ubb38\uc7a5\uc5d0 Google Docs \ubc29\uc2dd\uc758 \ub313\uae00\uc744 \ub2ec\uc544 \uc124\uacc4\ub97c \uc218\uc815\ud558\uac70\ub098, \ube0c\ub77c\uc6b0\uc800 \ucea1\ucc98 \uc774\ubbf8\uc9c0 \uc704\uc5d0 \ub9c8\uc6b0\uc2a4\ub85c \ubc15\uc2a4\ub97c \uadf8\ub824 \uc9c1\uad00\uc801\uc778 UI \uc218\uc815 \uc9c0\uc2dc\ub97c \ub0b4\ub9b4 \uc218 \uc788\uc2b5\ub2c8\ub2e4.'
+            title: '문서 댓글 & 화면 캡처 위 박스 피드백',
+            desc: '계획서의 특정 줄에 Google Docs처럼 댓글을 달아 방향을 수정하거나, 완성된 화면 캡처 위에 마우스로 네모 박스를 그려 "이 부분 그래프 색상을 바꿔줘"처럼 직관적으로 지시할 수 있습니다.'
           },
           {
             num: '04', color: 'var(--g-red)',
-            title: '\uc804\ubb38 \ud558\uc704 \uc5d0\uc774\uc804\ud2b8(Subagents) \ubd84\uc5c5',
-            desc: '\uba54\uc778 \uc5d0\uc774\uc804\ud2b8\uc758 \ucee8\ud14d\uc2a4\ud2b8\uac00 \uc624\uc5fc\ub418\uc9c0 \uc54a\ub3c4\ub85d \ub300\uaddc\ubaa8 \ucf54\ub4dc\ubca0\uc774\uc2a4 \uac80\uc0c9, \ub85c\uadf8 \ucd94\uc801, \ubcf4\uc548 \ucde8\uc57d\uc810 \uc810\uac80 \ub4f1 \uc138\ubd80 \uacfc\uc81c\ub97c \ub3c5\ub9bd\ub41c \ud558\uc704 \uc5d0\uc774\uc804\ud2b8\uc5d0\uac8c \ubcd1\ub82c \uc704\uc784\ud558\uc5ec \uc815\ud655\ub3c4\uc640 \uc18d\ub3c4\ub97c \ub192\uc785\ub2c8\ub2e4.'
+            title: '보조 에이전트(Subagents) 자동 분업',
+            desc: '작업 분량이 많거나 복잡할 때는 메인 에이전트가 알아서 세부 역할(데이터 분석, 화면 디자인, 테스트 점검 등)을 담당하는 보조 에이전트들을 생성해 빠르고 정확하게 나누어 처리합니다.'
           },
           {
             num: '05', color: 'var(--g-blue)',
-            title: '\uc790\uc5f0\uc5b4 \uc74c\uc131 \uc9c0\uc2dc(/voice) & \ud06c\ub860 \uc2a4\ucf00\uc904\ub9c1(/schedule)',
-            desc: 'Antigravity 2.0 \ubc0f CLI\uc5d0\uc11c \ubcf5\uc7a1\ud55c \uc544\ud0a4\ud14d\ucc98 \uc694\uad6c\uc0ac\ud56d\uc744 \ub9c8\uc774\ud06c\ub85c \uad6c\uc220\ud574 \uc804\ub2ec\ud558\uac70\ub098, \ub9e4\uc77c \uc624\uc804 \ucd9c\uadfc \uc804 \uc57c\uac04 \ube4c\ub4dc \uc2e4\ud328 \uc6d0\uc778\uc744 \ubd84\uc11d\ud574 \ubcf4\uace0\ud558\ub3c4\ub85d \ud06c\ub860(Cron) \uae30\ubc18 \uc815\uae30 \uc608\uc57d \uc791\uc5c5\uc744 \uc124\uc815\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.'
+            title: '음성 지시(/voice) & 정기 예약 실행(/schedule)',
+            desc: '키보드로 길게 타이핑하는 대신 마이크로 말해서(/voice) 요구사항을 전달하거나, 매주 월요일 아침마다 폴더 내 데이터를 모아 요약 리포트를 만들도록 정기 작업(/schedule)을 예약할 수 있습니다.'
           },
           {
             num: '06', color: 'var(--g-green)',
-            title: '\ud300 \ud45c\uc900 \uc2a4\ud0ac(SKILL.md) \u00b7 MCP \uc5f0\ub3d9 \u00b7 \uc2ac\ub798\uc2dc \ucee4\ub9e8\ub4dc',
-            desc: '\uc0ac\ub0b4 \ucf54\ub529 \ucee8\ubca4\uc158\uacfc \ubc30\ud3ec \uc808\ucc28\ub97c .agents/skills/*/SKILL.md\ub85c \ud45c\uc900\ud654\ud574 \uc804 \ud300\uc6d0\uc5d0\uac8c \uc77c\uad04 \uc801\uc6a9\ud558\uace0, MCP(Model Context Protocol)\ub85c \uc0ac\ub0b4 \uc774\uc288 \ud2b8\ub798\ucee4\u00b7DB\ub97c \uc5f0\uacb0\ud558\uba70, Antigravity 2.0 \ubc0f CLI\uc5d0\uc11c /learn\u00b7/grill-me\u00b7/goal\u00b7/plan \uba85\ub839\uc5b4\ub85c \uaddc\uce59(Rules)\uacfc \uc2a4\ud0ac\uc744 \ucd95\uc801\ud569\ub2c8\ub2e4.'
+            title: '팀 템플릿·표준 스킬(SKILL.md) 공유',
+            desc: '우리 팀이 자주 쓰는 대시보드 디자인 양식, 슬라이드 구성 규칙, 코딩 표준을 스킬 파일(SKILL.md)로 한 번 저장해 두면, 팀원 누구나 매번 설명하지 않아도 일관된 고품질 결과물을 얻을 수 있습니다.'
           }
         ],
 
-        s4Num: 'Section 04 \u2022 \uad6c\uc870\uc640 \ubcf4\uc548',
-        s4Title: '\uc138 \uac1c\uc758 \uacc4\uce35\uacfc Google Cloud \uc911\uc559 \ubcf4\uc548 \uad00\ub9ac',
-        s4Intro: '\uac1c\uc778\uc6a9 AI \ub3c4\uad6c\uac00 \uad00\ub9ac \ubc16\uc5d0\uc11c \uc4f0\uc774\ub294 \uc0c1\ud669\uc744 \uc904\uc77c \uc218 \uc788\ub3c4\ub85d, \uc870\uc9c1 \uc804\uccb4\uc758 \ubcf4\uc548 \uc815\ucc45\uc744 Google Cloud Console \ud55c \uacf3\uc5d0\uc11c \uad00\ub9ac\ud569\ub2c8\ub2e4. \uac01 \uacc4\uce35\uc744 \ub20c\ub7ec \uc138\ubd80 \ub0b4\uc6a9\uc744 \ud655\uc778\ud574 \ubcf4\uc138\uc694.',
+        s4Num: 'Section 04 • 구조와 보안',
+        s4Title: '세 개의 계층과 Google Cloud 중앙 보안 관리',
+        s4Intro: '임직원은 쉽고 편리하게 사용하고, IT·보안 관리자는 Google Cloud Console 한 곳에서 권한과 데이터 보안을 안전하게 통제합니다. 각 계층을 눌러 확인해 보세요.',
         tiers: [
           {
-            title: 'Layer 1 \u2022 \uc0ac\uc6a9\uc790 \uc2e4\ud589 \ud658\uacbd \ubc0f \ud1b5\ud569 \uc778\uc99d \uacc4\uce35 (Cloud Identity / WIF & GCP \ud504\ub85c\uc81d\ud2b8)',
-            badge: '\uc778\uc99d \ubc0f \uad8c\ud55c',
-            chips: ['Antigravity 2.0 \ub370\uc2a4\ud06c\ud1b1 \uc571', 'VS Code / Visual Studio / JetBrains(Preview) / Zed(Preview) / Xcode(Preview)', 'Antigravity CLI (agy)', 'Python SDK (Agent Platform)'],
-            explanation: '<strong>[Layer 1 \u2014 \uc5d4\ud130\ud504\ub77c\uc774\uc988 \ub2e8\uc77c \uc778\uc99d \ubc0f IAM \uc694\uac74]</strong> \uc0ac\uc6a9\uc790\ub294 \uc0ac\ub0b4 Cloud Identity(SSO) \ub610\ub294 Workforce Identity Federation(BYOID / WIF) \ubc0f Gemini Enterprise \ub77c\uc774\uc120\uc2a4\ub85c \ub85c\uadf8\uc778\ud569\ub2c8\ub2e4.<br/>\u2022 <strong>\ud544\uc218 IAM \uc5ed\ud560 \ubc0f API \uc0ac\uc804 \ud65c\uc131\ud654:</strong> \uc124\uc815 \uad00\ub9ac\uc5d0\ub294 <code>Gemini Enterprise Admin(roles/discoveryengine.agentspaceAdmin)</code>\uc774, \uc2e4\uc81c \ub3c4\uad6c \uc0ac\uc6a9\uc5d0\ub294 <code>Gemini Enterprise User(roles/discoveryengine.agentspaceUser)</code> \uc5ed\ud560\uc774 \uac01\uac01 \ud544\uc694\ud569\ub2c8\ub2e4(Admin \uc5ed\ud560\ub9cc\uc73c\ub85c\ub294 \ub3c4\uad6c \uc0ac\uc6a9 \uad8c\ud55c\uc774 \ubd80\uc5ec\ub418\uc9c0 \uc54a\uc74c). \ub610\ud55c \ub77c\uc774\uc120\uc2a4 \uad6c\ub9e4 \uc804 <code>aiplatform.googleapis.com</code> API\ub97c \uba3c\uc800 \ud65c\uc131\ud654\ud558\uace0 \uc57d 5\ubd84\uac04 \uc804\ud30c\ub97c \ub300\uae30\ud574\uc57c \ud504\ub85c\ube44\uc800\ub2dd \uc624\ub958\ub97c \ubc29\uc9c0\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.'
+            title: 'Layer 1 • 사용자 실행 환경 및 회사 계정 통합 로그인 (SSO / Cloud Identity)',
+            badge: '인증 및 사용 환경',
+            chips: ['Antigravity 2.0 데스크톱 앱', 'VS Code / Visual Studio / JetBrains 등 IDE 확장', 'Antigravity CLI (agy)', 'Python SDK'],
+            explanation: '<strong>[Layer 1 — 회사 계정 하나로 바로 시작]</strong> 임직원은 별도 개인 계정을 만들 필요 없이 평소 쓰는 <strong>회사 계정(SSO / Cloud Identity)</strong>으로 로그인해 데스크톱 앱이나 IDE 확장 프로그램을 바로 사용합니다. 관리자는 Cloud Console에서 부서·팀별로 사용 권한(Gemini Enterprise User 역할)을 간편하게 부여하거나 회수할 수 있습니다.'
           },
           {
-            title: 'Layer 2 \u2022 \uacf5\uc720 \uc5d0\uc774\uc804\ud2b8 \ud558\ub124\uc2a4 \ubc0f \uad00\ub9ac\uc790 \ucf54\ub529 \ud1b5\uc81c (Google Cloud Console)',
-            badge: '\uad00\ub9ac\uc790 \ubcf4\uc548 \ud1b5\uc81c',
-            chips: ['\uc791\uc5c5 \ud3f4\ub354 \uc678\ubd80 \ud30c\uc77c \uc811\uadfc (Deny / Always ask / Allow)', '\ud130\ubbf8\ub110 \uc790\ub3d9 \uc2e4\ud589 \ubaa8\ub4dc & \uc0cc\ub4dc\ubc15\uc2a4 \ubaa8\ub4dc \ud1a0\uae00', 'OS \uc218\uc900 \uc0cc\ub4dc\ubc15\uc2a4 (macOS \u00b7 Linux / Windows Preview)', '\ube0c\ub77c\uc6b0\uc800 URL \u00b7 JS \uc2e4\ud589 \ubc0f MCP \uc11c\ubc84 \ud5c8\uc6a9 \ubaa9\ub85d'],
-            explanation: '<strong>[Layer 2 \u2014 \uad00\ub9ac\uc790 \ucf54\ub529 \ud1b5\uc81c(Admin Coding Controls)]</strong> IT\u00b7\ubcf4\uc548 \uad00\ub9ac\uc790\uac00 Google Cloud Console\uc758 <code>Gemini Enterprise \u203a Settings \u203a AI developer tools</code> \ud0ed\uc5d0\uc11c \uc804\uc0ac \uac00\ub4dc\ub808\uc77c\uc744 \uad6c\uc131\ud569\ub2c8\ub2e4.<br/>\u2022 <strong>\uc791\uc5c5 \ud3f4\ub354 \uc678\ubd80 \ud30c\uc77c \uc811\uadfc:</strong> <code>Deny</code>(\ucd5c\ucd08 \uc124\uc815 \uc2dc \uae30\ubcf8\uac12) / <code>Always ask</code> / <code>Allow</code> \uc911 \uc9c0\uc815\ud574 \ud504\ub85c\uc81d\ud2b8 \ud3f4\ub354 \ubc16\uc758 \ud30c\uc77c \uc811\uadfc\uc744 \ud1b5\uc81c\ud569\ub2c8\ub2e4.<br/>\u2022 <strong>\ud130\ubbf8\ub110 \uc2e4\ud589 \ubc0f \uc0cc\ub4dc\ubc15\uc2a4 \uc8fc\uc758\uc0ac\ud56d:</strong> Cloud Console\uc5d0\uc11c <code>Terminal auto-execution mode</code>(\uae30\ubcf8\uac12: <code>Always proceed</code>)\uc640 <code>Sandbox mode</code>(\ubcc4\ub3c4 \ud1a0\uae00, \uae30\ubcf8\uac12: <code>Disabled</code>)\ub294 \uac1c\ubcc4 \uc124\uc815\uc785\ub2c8\ub2e4. \uc0cc\ub4dc\ubc15\uc2a4 \uaca9\ub9ac\ub97c \uac15\uc81c\ud558\ub824\uba74 \ubc18\ub4dc\uc2dc <code>Sandbox mode</code>\ub97c \ud65c\uc131\ud654\ud558\uace0 <code>Proceed in sandbox</code> \ub610\ub294 <code>Require review</code>\ub85c \ubcc0\uacbd\ud558\uc138\uc694(OS \ub124\uc774\ud2f0\ube0c \uc0cc\ub4dc\ubc15\uc2a4\ub294 macOS\u00b7Linux \uc9c0\uc6d0, Windows\ub294 Preview).<br/>\u2022 <strong>\ube0c\ub77c\uc6b0\uc800 \u00b7 MCP \u00b7 \uac10\uc0ac \ub85c\uae45:</strong> <code>Browser access</code>, <code>Browser JavaScript auto-execution</code>, <code>MCP servers</code>, <code>Prompts and responses logging</code>\uc740 \ubaa8\ub450 \uae30\ubcf8\uac12\uc774 <code>Disabled</code>\uc774\ubbc0\ub85c \ubc30\ud3ec \uc804 \uc870\uc9c1 \ubcf4\uc548 \uae30\uc900\uc5d0 \ub9de\uac8c \uba85\uc2dc\uc801\uc73c\ub85c \uad6c\uc131\ud574\uc57c \ud569\ub2c8\ub2e4.'
+            title: 'Layer 2 • 중앙 관리자 보안 가드레일 (Google Cloud Console)',
+            badge: '관리자 보안 통제',
+            chips: ['지정 폴더 외 파일 접근 차단 (기본값 Deny)', '터미널 실행 및 샌드박스 격리 설정', '브라우저 접속 허용 URL 관리', '감사 로그(Audit Logging) 지원'],
+            explanation: '<strong>[Layer 2 — 조직 보안 기준에 맞춘 중앙 통제]</strong> 보안 관리자는 Google Cloud Console에서 전사 보안 정책을 일괄 지정할 수 있습니다.<br/>• <strong>폴더 외부 접근 차단:</strong> 에이전트가 사용자가 열어준 작업 폴더 밖의 PC 파일에 접근하지 못하도록 기본 차단(<code>Deny</code>)합니다.<br/>• <strong>실행 권한 및 브라우저 통제:</strong> 명령어 자동 실행 여부, OS 샌드박스 격리 모드, 에이전트가 접속할 수 있는 웹사이트(URL) 허용 목록을 기업 보안 기준에 맞게 제어합니다.'
           },
           {
-            title: 'Layer 3 \u2022 Gemini 3 \ubaa8\ub378 \ud328\ubc00\ub9ac \ubc0f \ub370\uc774\ud130 \ubcf4\ud638 (Google Cloud ToS)',
-            badge: '\ubaa8\ub378 \ubc0f \ub370\uc774\ud130 \ubcf4\ud638',
-            chips: ['Gemini 3.1 Pro (\uc2ec\uce35 \ucd94\ub860)', 'Gemini 3.8 / 3.7 / 3.6 Flash (\uace0\uc18d \uc2e4\ud589)', 'global / us / eu \ub9ac\uc804 \uc5d4\ub4dc\ud3ec\uc778\ud2b8', '\uace0\uac1d \ub370\uc774\ud130 \ube44\ud559\uc2b5 (GCP ToS) \u00b7 VPC Service Controls'],
-            explanation: '<strong>[Layer 3 \u2014 \ubaa8\ub378 \uc9c0\uc6d0 \ubc94\uc704 \ubc0f \ub370\uc774\ud130 \uc8fc\uad8c]</strong> Gemini Enterprise AI developer tools\ub294 <strong>Google \uc790\uccb4 \ubaa8\ub378\ub9cc \uc9c0\uc6d0</strong>\ud569\ub2c8\ub2e4. \uc2ec\uce35 \ucd94\ub860\uc6a9 <strong>Gemini 3.1 Pro</strong>\uc640 \uace0\uc18d \uc2e4\ud589\uc6a9 <strong>Gemini 3.8 / 3.7 / 3.6 Flash</strong>(\ubc31\uadf8\ub77c\uc6b4\ub4dc \uc791\uc5c5\uc6a9 Gemini Flash Lite \ubc0f global \ub9ac\uc804 \uc774\ubbf8\uc9c0 \uc0dd\uc131\uc6a9 Gemini 3 Pro Image \ud3ec\ud568)\ub97c \uc81c\uacf5\ud558\uba70, Claude 4.6 \u00b7 GPT-OSS-120b \ub4f1 \ud0c0\uc0ac(3P) \ubaa8\ub378\uc740 \uc5d4\ud130\ud504\ub77c\uc774\uc988\uc5d0\uc11c \uc81c\uacf5\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.<br/>\u2022 <strong>\uace0\uac1d \ub370\uc774\ud130 \ubcf4\ud638:</strong> <strong>Google Cloud \uc11c\ube44\uc2a4 \uc57d\uad00(GCP ToS)</strong>\uc5d0 \ub530\ub77c \uace0\uac1d\uc758 \ucf54\ub4dc, \ud504\ub86c\ud504\ud2b8, \uc5d0\uc774\uc804\ud2b8 \ub300\ud654 \uae30\ub85d\uc740 Google \ud30c\uc6b4\ub370\uc774\uc158 \ubaa8\ub378 \ud559\uc2b5\uc774\ub098 \uc778\ub825 \uac80\ud1a0\uc5d0 \uc0ac\uc6a9\ub418\uc9c0 \uc54a\uc73c\uba70, \uc5d4\ud130\ud504\ub77c\uc774\uc988 \ud504\ub86c\ud504\ud2b8\u00b7\uc751\ub2f5\u00b7\ucf54\ub4dc\u00b7\ud154\ub808\uba54\ud2b8\ub9ac\ub294 \uc870\uc9c1\uc758 Google Cloud \ud658\uacbd \ubc16\uc5d0 \uc800\uc7a5\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.<br/>\u2022 <strong>\ub9ac\uc804 \uc5d4\ub4dc\ud3ec\uc778\ud2b8 \ubc0f \ub124\ud2b8\uc6cc\ud06c \ubcf4\uc548:</strong> \ub370\uc774\ud130 \ub808\uc9c0\ub358\uc2dc \uc694\uac74\uc5d0 \ub530\ub77c <code>global</code>, <code>us</code>, <code>eu</code> \uc5d4\ub4dc\ud3ec\uc778\ud2b8\ub97c \uc120\ud0dd\ud560 \uc218 \uc788\uc73c\uba70(\uc774\ubbf8\uc9c0 \uc0dd\uc131 \ubc0f Preview \ubaa8\ub378\uc740 <code>global</code> \uc804\uc6a9), <strong>VPC Service Controls</strong> \ubc0f \uc694\uccad\u00b7\uc751\ub2f5 \uac10\uc0ac \ub85c\uae45\uacfc \ud568\uaed8 \uc0ac\uc6a9\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.'
+            title: 'Layer 3 • Google Gemini 3 모델 및 기업 데이터 보호 (Google Cloud ToS)',
+            badge: '모델 및 데이터 보호',
+            chips: ['Gemini 3.1 Pro (정밀 설계·추론)', 'Gemini 3.8 / 3.7 / 3.6 Flash (빠른 제작·실행)', '고객 데이터·파일 모델 비학습 보장', '데이터 저장 리전(Global / US / EU) 선택'],
+            explanation: '<strong>[Layer 3 — 검증된 Google 모델과 철저한 데이터 보호]</strong> 엔터프라이즈 환경은 외부 타사 모델을 배제하고 Google의 <strong>Gemini 3.1 Pro</strong>(복잡한 기획·설계용)와 <strong>Gemini 3.8 / 3.7 / 3.6 Flash</strong>(빠른 화면 제작·반복 작업용) 모델을 제공합니다.<br/>• <strong>고객 데이터 비학습:</strong> <strong>Google Cloud 서비스 약관(GCP ToS)</strong>에 따라 업무 파일, 엑셀 데이터, 코드, 대화 내용은 <strong>AI 모델 학습이나 외부 인력 검토에 절대 사용되지 않으며</strong> 조직의 Google Cloud 환경 밖으로 유출되지 않습니다.'
           }
         ],
 
-        s5Num: 'Section 05 \u2022 \ub3c4\uc785 \uc804 \ud655\uc778\ud560 \uc810',
-        s5Title: '\ube44\uc6a9\uc740 \uc5b4\ub5bb\uac8c \uacc4\uc0b0\ub418\uace0, \ubb34\uc5c7\uc744 \ud655\uc778\ud558\uba74 \ub420\uae4c\uc694',
-        s5Intro: 'Gemini Enterprise(Standard \u00b7 Plus \u00b7 Pay-as-you-go, \uccad\uad6c\uc11c \ubc1c\ud589 Cloud Billing \uacc4\uc815 \ud544\uc218)\uc5d0 \ud3ec\ud568\ub418\uba70, \uc88c\uc11d\ud615 \ud50c\ub79c\uc758 \uae30\ubcf8 \uc0ac\uc6a9\ub7c9\uc740 \ud504\ub85c\uc81d\ud2b8 \ub2e8\uc704 \uc8fc\uac04 \uacf5\uc720 \ud480\ub85c \uad00\ub9ac\ub429\ub2c8\ub2e4.',
+        s5Num: 'Section 05 • 도입 전 확인할 점',
+        s5Title: '비용은 어떻게 계산되고, 무엇을 확인하면 될까요',
+        s5Intro: 'Gemini Enterprise(Standard · Plus · Pay-as-you-go)를 통해 제공되며, 좌석형 플랜의 기본 사용량은 프로젝트 단위 주간 공유 풀로 합리적으로 관리됩니다.',
         values: [
           {
-            metric: '\ud504\ub85c\uc81d\ud2b8 \uc8fc\uac04 \uacf5\uc720 \ud480 (Standard \u00b7 Plus)',
+            metric: '팀 단위 주간 공유 풀 (Standard · Plus)',
             color: 'var(--g-blue)',
-            desc: 'Standard(\uc6d4 $10/\uc778) \ubc0f Plus(\uc6d4 $15/\uc778)\uc758 \ud3ec\ud568 \ud06c\ub808\ub527\uc740 4\ub85c \ub098\ub208 \uc8fc\uac04 \ud569\uc0b0 \ud480(\uc8fc\uac04 \ub2e8\uc704 \uac31\uc2e0, \ubbf8\uc0ac\uc6a9\ubd84 \uc774\uc6d4 \ubd88\uac00)\ub85c \ud300\uc6d0\uc774 \ud568\uaed8 \uc0ac\uc6a9\ud569\ub2c8\ub2e4. Pay-as-you-go \uc5d0\ub514\uc158\uc740 \uae30\ubcf8 \ud480 \uc5c6\uc774 \uc0ac\uc6a9\ub7c9\ub9cc\ud07c \uacfc\uae08\ub429\ub2c8\ub2e4.'
+            desc: 'Standard(월 $10/인 상당) 및 Plus(월 $15/인 상당)에 포함된 기본 사용량은 프로젝트 전체의 주간 공유 풀로 합산되어, 사용량이 많은 팀원과 적은 팀원이 효율적으로 나누어 쓸 수 있습니다.'
           },
           {
-            metric: '\uc791\uc5c5\uc5d0 \ub9de\ub294 Gemini 3 \ubaa8\ub378 \uc120\ud0dd',
+            metric: '작업에 맞춘 Gemini 3 모델 활용',
             color: 'var(--g-green)',
-            desc: '\uae4a\uc740 \uc124\uacc4 \uc791\uc5c5\uc5d0\ub294 Gemini 3.1 Pro\ub97c, \ubc18\ubcf5\uc801\uc778 \uc218\uc815\uacfc \ud14c\uc2a4\ud2b8\uc5d0\ub294 Gemini 3.8 / 3.7 / 3.6 Flash\ub97c \uc120\ud0dd\ud574 \ud480\uc744 \ud6a8\uc728\uc801\uc73c\ub85c \uc6b4\uc6a9\ud569\ub2c8\ub2e4(\ubc31\uadf8\ub77c\uc6b4\ub4dc Flash Lite \ubc0f \uc774\ubbf8\uc9c0 \uc0dd\uc131\uc740 \ubcc4\ub3c4 \uc0ac\uc6a9\ub7c9 \ubc18\uc601).'
+            desc: '정교한 기획과 복합 대시보드 설계에는 Gemini 3.1 Pro를, 일상적인 슬라이드 수정이나 빠른 화면 제작에는 가벼운 Gemini 3.8 / 3.7 / 3.6 Flash를 선택해 사용량을 여유 있게 운영합니다.'
           },
           {
-            metric: '\ucd08\uacfc \uc0ac\uc6a9(Overage) \ud1a0\uae00 \ubc0f \uc6d4\uac04 \uc9c0\ucd9c \ud55c\ub3c4',
+            metric: '예기치 않은 초과 과금 방지 (Spend Cap)',
             color: 'var(--g-yellow)',
-            desc: 'Standard\u00b7Plus\ub294 \uad00\ub9ac\uc790\uac00 Overage\ub97c \ucf20 \uacbd\uc6b0\uc5d0\ub9cc \ud480 \uc18c\uc9c4 \ud6c4 \ucd94\uac00 \uacfc\uae08\ub418\uba70, Vertex AI \uc6d4\uac04 \uc9c0\ucd9c \ud55c\ub3c4\ub97c \uc124\uc815\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4(\ub2e8, \ud55c\ub3c4 \ub3c4\ub2ec \ud6c4 \ucc28\ub2e8\uae4c\uc9c0 \uc218 \ubd84\uc758 \uc9c0\uc5f0\uc774 \uc788\uc5b4 \uc18c\uc561 \ucd08\uacfc\ubd84\uc774 \ubc1c\uc0dd\ud560 \uc218 \uc788\uc74c).'
+            desc: '주간 기본 풀이 소진되면 자동으로 사용이 멈추어 예상치 못한 추가 비용이 발생하지 않습니다. 관리자가 원할 때만 초과 사용(Overage)을 켜고 월간 지출 한도를 지정할 수 있습니다.'
           }
         ],
-        tableHeaders: ['\ud655\uc778\ud560 \uc810', 'Antigravity \uc81c\uacf5 \ubc29\uc2dd'],
+        tableHeaders: ['확인할 점', 'Antigravity 제공 방식'],
         tableRows: [
           [
-            '<strong>\uc791\uc5c5 \uacb0\uacfc\ub97c \uc81c\ub300\ub85c \uac80\ud1a0\ud560 \uc218 \uc788\ub098\uc694?</strong>',
-            '\uacc4\ud68d\uc11c(Implementation Plan), \ucf54\ub4dc \ubcc0\uacbd \uc0ac\ud56d, \ube0c\ub77c\uc6b0\uc800 \ud654\uba74 \ucea1\ucc98(\uc2a4\ud06c\ub9b0\uc0f7) \ubc0f \ub179\ud654, \uc644\ub8cc \ubcf4\uace0\uc11c(Walkthrough)\uac00 \ubaa8\ub450 \uc544\ud2f0\ud329\ud2b8 \uae30\ub85d\uc73c\ub85c \ub0a8\uace0, \uac01 \ud56d\ubaa9\uc5d0 \ub313\uae00\uc744 \ub2ec\uc544 \uc7ac\uc791\uc5c5\uc744 \uc694\uccad\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.'
+            '<strong>비개발자도 어렵지 않게 쓸 수 있나요?</strong>',
+            '코딩 명령어를 몰라도 <strong>Antigravity 2.0 데스크톱 앱</strong>에서 엑셀·문서 파일을 지정하고 일상 언어나 음성으로 지시하면 대시보드, 다이내믹 HTML 슬라이드, 웹 시제품을 바로 만들 수 있습니다.'
           ],
           [
-            '<strong>\uc4f0\ub358 \uac1c\ubc1c \ud658\uacbd\uc744 \uadf8\ub300\ub85c \uc720\uc9c0\ud560 \uc218 \uc788\ub098\uc694?</strong>',
-            '\ub3c5\ub9bd\ud615 \ub370\uc2a4\ud06c\ud1b1 \uc571(Antigravity 2.0)\uacfc \ud568\uaed8 \uc8fc\uc694 IDE\uc6a9 \uacf5\uc2dd \ud655\uc7a5 \ud504\ub85c\uadf8\ub7a8(VS Code \u00b7 Visual Studio \uc815\uc2dd \uc9c0\uc6d0, JetBrains \u00b7 Zed \u00b7 Xcode Preview), \ud130\ubbf8\ub110 CLI(agy)\ub97c \uc81c\uacf5\ud574 \ud300\ubcc4\ub85c \uc775\uc219\ud55c \ud658\uacbd\uc744 \uace0\ub97c \uc218 \uc788\uc2b5\ub2c8\ub2e4.'
+            '<strong>에이전트가 만든 결과를 어떻게 확인하고 고치나요?</strong>',
+            '작업 전 계획서(Plan), 완성된 화면 캡처, 브라우저 시연 녹화본(Walkthrough)이 모두 깔끔하게 정리되어 제공되며, 화면 캡처 위에 마우스로 박스를 그려 손쉽게 수정을 지시할 수 있습니다.'
           ],
           [
-            '<strong>\ud300 \ud45c\uc900\uc744 \ub9e4\ubc88 \ub2e4\uc2dc \uc54c\ub824\uc918\uc57c \ud558\ub098\uc694?</strong>',
-            '\uc0ac\ub0b4 \ucf54\ub529 \uaddc\uce59\uacfc \ubc30\ud3ec \uc808\ucc28\ub97c \uc800\uc7a5\uc18c\uc758 <code>.agents/skills/*/SKILL.md</code> \ubc0f \uaddc\uce59 \ud30c\uc77c\ub85c \ud568\uaed8 \ub450\uba74, \ud300\uc6d0 \ubaa8\ub450\uc758 \uc5d0\uc774\uc804\ud2b8\uac00 \uac19\uc740 \uae30\uc900\uc73c\ub85c \ub3d9\uc791\ud569\ub2c8\ub2e4.'
+            '<strong>우리 팀만의 양식이나 기준을 유지할 수 있나요?</strong>',
+            '자주 쓰는 보고서·대시보드 스타일이나 개발 규칙을 <code>SKILL.md</code> 파일로 폴더에 넣어두면, 팀원 모두의 에이전트가 매번 같은 디자인과 품질 기준으로 작업합니다.'
           ],
           [
-            '<strong>\uc870\uc9c1 \ucc28\uc6d0\uc5d0\uc11c \ud1b5\uc81c\ud560 \uc218 \uc788\ub098\uc694?</strong>',
-            '\ud68c\uc0ac \uacc4\uc815(Cloud Identity / WIF)\uc73c\ub85c \ub85c\uadf8\uc778\ud558\uba70, Cloud Console\uc5d0\uc11c \uc678\ubd80 \ud30c\uc77c \uc811\uadfc, \ud130\ubbf8\ub110 \uc790\ub3d9 \uc2e4\ud589 \ubc0f \uc0cc\ub4dc\ubc15\uc2a4 \ud1a0\uae00, \ube0c\ub77c\uc6b0\uc800 URL\u00b7MCP \ud5c8\uc6a9 \ubaa9\ub85d, \uac10\uc0ac \ub85c\uae45\uc744 \uad00\ub9ac\uc790\uac00 \uc911\uc559 \uc124\uc815\ud569\ub2c8\ub2e4.'
+            '<strong>회사 차원의 보안과 통제가 가능한가요?</strong>',
+            '회사 계정(SSO)으로 로그인하며, 관리자가 Cloud Console에서 작업 폴더 외부 파일 접근 차단, 실행 권한, 브라우저 허용 목록을 중앙에서 안전하게 통제합니다.'
           ]
         ],
 
-        s6Num: 'Section 06 \u2022 \uc790\uc8fc \ubb3b\ub294 \uc9c8\ubb38',
-        s6Title: '\ub3c4\uc785\uc744 \uac80\ud1a0\ud558\uc2e4 \ub54c \uc790\uc8fc \ub098\uc624\ub294 \ub124 \uac00\uc9c0 \uc9c8\ubb38',
-        s6Intro: '\uacf5\uc2dd \ubb38\uc11c(\uac00\uaca9\u00b7\uc5d4\ud130\ud504\ub77c\uc774\uc988\u00b7\ubaa8\ub378\u00b7Cloud AI developer tools)\ub97c \uae30\uc900\uc73c\ub85c \ud575\uc2ec\uacfc \uc8fc\uc758\uc0ac\ud56d\uc744 \uc815\ub9ac\ud588\uc2b5\ub2c8\ub2e4.',
-        factHeaders: ['\uc9c8\ubb38', '\uc694\uc57d', '\uc124\uba85', '\uacf5\uc2dd \ubb38\uc11c'],
+        s6Num: 'Section 06 • 자주 묻는 질문',
+        s6Title: '도입을 검토하실 때 자주 나오는 네 가지 질문',
+        s6Intro: '공식 문서를 기준으로 기업 도입 시 가장 많이 확인하시는 핵심 사항을 정리했습니다.',
+        factHeaders: ['질문', '요약', '설명', '공식 문서'],
         factRows: [
           [
-            '<strong>\uc9c1\uc6d0\uc774 \uac1c\uc778 \uacc4\uc815\uc73c\ub85c \uc4f0\ub358 \uac83\uacfc \ubb34\uc5c7\uc774 \ub2e4\ub978\uac00\uc694?</strong>',
-            '<span class="verdict-badge verdict-caveat">\uacf5\ud1b5 \ucf54\uc5b4 \u00b7 \uc81c\uacf5 \ubc94\uc704 \ucc28\uc774</span>',
-            '\ud575\uc2ec \uc5d0\uc774\uc804\ud2b8 \ud558\ub124\uc2a4\ub294 \uac19\uc73c\ub098 \uc81c\uacf5 \ubc94\uc704\uc640 \uac70\ubc84\ub10c\uc2a4\uac00 \ub2e4\ub985\ub2c8\ub2e4. \uae30\uc5c5 \ud2b8\ub799\uc740 Google Cloud \uc11c\ube44\uc2a4 \uc57d\uad00\u00b7Cloud Console \uad00\ub9ac\uc790 \ud1b5\uc81c\u00b7\ud504\ub85c\uc81d\ud2b8 \uc8fc\uac04 \uacf5\uc720 \ud480\uc744 \uc81c\uacf5\ud558\ub294 \ub300\uc2e0, \uac1c\uc778\uc6a9 \ub2e8\ub3c5 <code>Antigravity IDE</code>(\ud0ed \uc790\ub3d9\uc644\uc131 \ud3ec\ud568)\uc640 \uc678\ubd80 3P \ubaa8\ub378(Claude\u00b7GPT-OSS)\uc740 \uc81c\uc678\ub418\uba70 Antigravity 2.0\u00b7IDE \ud655\uc7a5\u00b7CLI\u00b7SDK\ub85c \uc6b4\uc601\ub429\ub2c8\ub2e4.',
-            '<a href="https://antigravity.google/docs/enterprise" target="_blank" rel="noopener noreferrer">Enterprise \ubb38\uc11c</a> \u00b7 <a href="https://antigravity.google/pricing" target="_blank" rel="noopener noreferrer">\ud50c\ub79c \uc548\ub0b4</a>'
+            '<strong>직원이 개인 계정으로 쓰던 것과 무엇이 다른가요?</strong>',
+            '<span class="verdict-badge verdict-caveat">기업 보안 약관 · 중앙 통제 적용</span>',
+            '핵심 에이전트 엔진은 같지만, 기업 트랙은 <strong>Google Cloud 서비스 약관(데이터 비학습)</strong>, Cloud Console 관리자 보안 통제, 프로젝트 단위 주간 공유 풀이 적용됩니다. 개인용 단독 에디터(<code>Antigravity IDE</code>) 대신 기업 환경에 맞춘 Antigravity 2.0 데스크톱 앱·IDE 확장·CLI·SDK로 운영됩니다.',
+            '<a href="https://antigravity.google/docs/enterprise" target="_blank" rel="noopener noreferrer">Enterprise 문서</a> · <a href="https://antigravity.google/pricing" target="_blank" rel="noopener noreferrer">플랜 안내</a>'
           ],
           [
-            '<strong>Gemini Enterprise\uc5d0\ub294 \ubb34\uc5c7\uc774 \ud3ec\ud568\ub418\ub098\uc694?</strong>',
-            '<span class="verdict-badge verdict-caveat">\uae30\ubcf8 3\uc885 + \ubcc4\ub3c4 SDK (\uccad\uad6c\uc11c \uacc4\uc815 \ud544\uc218)</span>',
-            '\uccad\uad6c\uc11c \ubc1c\ud589(Invoiced) Cloud Billing \uacc4\uc815\uc774 \uc5f0\uacb0\ub41c Gemini Enterprise(Standard: \uc6d4 $10/\uc778, Plus: \uc6d4 $15/\uc778 \uc8fc\uac04 \ud480, PayGo: \uc885\ub7c9\uc81c)\uc5d0 Antigravity 2.0, IDE \ud655\uc7a5, CLI\uac00 \ud3ec\ud568\ub429\ub2c8\ub2e4. Python SDK\ub294 Agent Platform \uc0ac\uc6a9\ub7c9\uc73c\ub85c \ubcc4\ub3c4 \uacfc\uae08\ub418\uba70, \ub3c4\uad6c \uc0ac\uc6a9\uc790\uc5d0\uac8c\ub294 <code>Gemini Enterprise User</code> IAM \uc5ed\ud560 \ubd80\uc5ec\uac00 \ud544\uc218\uc785\ub2c8\ub2e4.',
-            '<a href="https://docs.cloud.google.com/gemini/enterprise/docs/ai-developer-tools-overview" target="_blank" rel="noopener noreferrer">Cloud AI Developer Tools \uac1c\uc694</a> \u00b7 <a href="https://docs.cloud.google.com/gemini/enterprise/docs/quotas-and-overages" target="_blank" rel="noopener noreferrer">\ucffc\ud130 \ubc0f \ucd08\uacfc \uacfc\uae08</a>'
+            '<strong>Gemini Enterprise에는 무엇이 포함되나요?</strong>',
+            '<span class="verdict-badge verdict-caveat">데스크톱 앱 · IDE 확장 · CLI 기본 포함</span>',
+            '청구서 발행(Invoiced) Cloud Billing 계정이 연결된 Gemini Enterprise(Standard: 월 $10/인, Plus: 월 $15/인 상당 주간 공유 풀, PayGo: 종량제)에 Antigravity 2.0 데스크톱 앱, 공식 IDE 확장, CLI가 모두 포함됩니다.',
+            '<a href="https://docs.cloud.google.com/gemini/enterprise/docs/ai-developer-tools-overview" target="_blank" rel="noopener noreferrer">Cloud AI Developer Tools 개요</a> · <a href="https://docs.cloud.google.com/gemini/enterprise/docs/quotas-and-overages" target="_blank" rel="noopener noreferrer">쿼터 및 초과 과금</a>'
           ],
           [
-            '<strong>\uc5b4\ub5a4 AI \ubaa8\ub378\uc744 \uc0ac\uc6a9\ud558\ub098\uc694?</strong>',
-            '<span class="verdict-badge verdict-true">Google Gemini 3 \ubaa8\ub378 \uc804\uc6a9</span>',
-            '\uc5d4\ud130\ud504\ub77c\uc774\uc988\ub294 Google \uc790\uccb4 \ubaa8\ub378\uc778 <strong>Gemini 3.1 Pro</strong>\uc640 <strong>Gemini 3.8 / 3.7 / 3.6 Flash</strong>(\ubc31\uadf8\ub77c\uc6b4\ub4dc\uc6a9 Gemini Flash Lite \ubc0f global \uc774\ubbf8\uc9c0 \uc0dd\uc131\uc6a9 Gemini 3 Pro Image \ud3ec\ud568)\ub97c \uc9c0\uc6d0\ud569\ub2c8\ub2e4. Claude Sonnet/Opus 4.6 \ubc0f GPT-OSS-120b\ub294 \uac1c\uc778 \ud50c\ub79c\uc5d0\uc11c\ub9cc \uc81c\uacf5\ub429\ub2c8\ub2e4.',
-            '<a href="https://antigravity.google/docs/models" target="_blank" rel="noopener noreferrer">\uacf5\uc2dd \ubaa8\ub378 \ubb38\uc11c</a>'
+            '<strong>어떤 AI 모델을 사용하나요?</strong>',
+            '<span class="verdict-badge verdict-true">Google Gemini 3 모델 전용</span>',
+            '엔터프라이즈 환경은 검증된 Google 자체 모델인 <strong>Gemini 3.1 Pro</strong>와 <strong>Gemini 3.8 / 3.7 / 3.6 Flash</strong>(배경 작업용 Flash Lite 및 이미지 생성 모델 포함)를 지원하여 일관된 보안과 데이터 거버넌스를 보장합니다.',
+            '<a href="https://antigravity.google/docs/models" target="_blank" rel="noopener noreferrer">공식 모델 문서</a>'
           ],
           [
-            '<strong>\uc6b0\ub9ac \ucf54\ub4dc\uac00 \ubaa8\ub378 \ud559\uc2b5\uc5d0 \uc4f0\uc774\ub098\uc694?</strong>',
-            '<span class="verdict-badge verdict-true">\ud559\uc2b5\uc5d0 \uc0ac\uc6a9\ub418\uc9c0 \uc54a\uc74c</span>',
-            'Google Cloud \uc11c\ube44\uc2a4 \uc57d\uad00(GCP ToS)\uc5d0 \ub530\ub77c \uace0\uac1d\uc758 \ucf54\ub4dc, \ud504\ub86c\ud504\ud2b8, \uc5d0\uc774\uc804\ud2b8 \ub300\ud654 \uae30\ub85d\uc740 \ubaa8\ub378 \ud559\uc2b5\uc774\ub098 \uc778\ub825 \uac80\ud1a0\uc5d0 \uc0ac\uc6a9\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. \ub370\uc774\ud130 \uc704\uce58\ub294 Global \u00b7 US \u00b7 EU \ub9ac\uc804(\uc774\ubbf8\uc9c0 \uc0dd\uc131\uc740 Global \uc804\uc6a9) \uc911\uc5d0\uc11c \uc120\ud0dd\ud560 \uc218 \uc788\uc73c\uba70 VPC Service Controls\ub97c \uc9c0\uc6d0\ud569\ub2c8\ub2e4.',
-            '<a href="https://cloud.google.com/terms" target="_blank" rel="noopener noreferrer">Google Cloud \uc11c\ube44\uc2a4 \uc57d\uad00</a>'
+            '<strong>업무 파일이나 코드가 모델 학습에 쓰이나요?</strong>',
+            '<span class="verdict-badge verdict-true">학습에 절대 사용되지 않음</span>',
+            'Google Cloud 서비스 약관(GCP ToS)에 따라 고객의 엑셀·문서 파일, 소스코드, 프롬프트는 AI 모델 학습이나 외부 검토에 사용되지 않으며, Global · US · EU 리전 선택 및 VPC Service Controls를 지원합니다.',
+            '<a href="https://cloud.google.com/terms" target="_blank" rel="noopener noreferrer">Google Cloud 서비스 약관</a>'
           ]
         ]
       },
 
       en: {
-        heroBadge: 'Google Antigravity \u2022 Enterprise Deployment on Gemini Enterprise',
+        heroBadge: 'Google Antigravity • Enterprise Deployment on Gemini Enterprise',
         heroTitle: 'The Agent-First Platform for Software Development & Automation',
-        heroLead: '<strong>Google Antigravity</strong> is Google\u2019s <strong>agent-based software development platform</strong>. You describe the outcome, and autonomous agents carry the work from planning through implementation and verification.',
-        heroLeadSub: 'Connecting through <strong>Gemini Enterprise</strong> brings centralized admin controls, the Google Cloud Terms of Service, and team-level usage management under a single corporate sign-in.',
+        heroLead: '<strong>Google Antigravity</strong> is Google’s <strong>agent-first development and creation platform</strong>. Describe your goal in plain language, and autonomous agents carry the work from planning through execution and live browser verification.',
+        heroLeadSub: 'Built for both <strong>business users (planners, marketers, analysts) and software engineers</strong>—turn local Excel sheets into interactive dashboards or dynamic HTML slides, governed centrally under <strong>Gemini Enterprise</strong> and the Google Cloud Terms of Service.',
         heroFlow: [
-          { name: 'Plan', desc: 'Agents draft an Implementation Plan and wait for your approval first.' },
-          { name: 'Act', desc: 'Agents edit multiple files and run tests directly in the terminal.' },
-          { name: 'Verify', desc: 'Agents check the running app in a live browser and report evidence.' }
+          { name: 'Plan', desc: 'Agents draft a clear Plan and wait for your approval before making changes.' },
+          { name: 'Act', desc: 'Agents build dashboards, slides, or code and self-correct errors.' },
+          { name: 'Verify', desc: 'Agents open a real browser to test the result and attach visual proof.' }
+        ],
+        ucNum: 'Use Cases • Practical Scenarios',
+        ucTitle: 'When should you use Antigravity?',
+        ucIntro: 'From non-technical planners and marketers to professional engineers — here is what you can create from local files with a single plain-language request. Click each item to see the actual prompt and the result.',
+        ucPromptLabel: 'Just say something like this',
+        ucResultLabel: 'What the agent delivers',
+        useCases: [
+          {
+            icon: '📊',
+            visual: 'dashboard',
+            name: 'Excel/CSV to Interactive Dashboards',
+            sub: 'Turn a static spreadsheet into a clickable web dashboard',
+            prompt: '“Read our Q3 sales Excel file (sales_q3.xlsx) and build a dashboard I can filter by region and product.”',
+            results: [
+              'KPI summary cards with region and product filters, generated automatically',
+              'Interactive charts with hover tooltips showing exact figures',
+              'Built-in “Save chart as image” button for reports and decks'
+            ]
+          },
+          {
+            icon: '🎞️',
+            visual: 'slides',
+            name: 'Dynamic HTML Slides & Presentations',
+            sub: 'Replace static documents with living web presentations',
+            prompt: '“Turn this proposal document into a web-based slide deck with smooth page transitions and animated charts.”',
+            results: [
+              'Full-screen slide deck with cover, body, and closing sections',
+              'Page transition animations and responsive charts',
+              'Present straight from a browser — no extra software needed'
+            ]
+          },
+          {
+            icon: '🚀',
+            visual: 'prototype',
+            name: 'Ideas into Clickable Prototypes',
+            sub: 'Go from a rough sketch to a working screen flow',
+            prompt: '“Build an internal request app screen based on this sketch, and make the buttons navigate to the next screen.”',
+            results: [
+              'Reads your brief or sketch and lays out real working screens',
+              'Clickable prototype (MVP) with screen-to-screen navigation',
+              'Share one link to demo live with your team or leadership'
+            ]
+          },
+          {
+            icon: '🗂️',
+            visual: 'report',
+            name: 'File Cleanup & Scheduled Reports',
+            sub: 'Automate the weekly collect-and-summarize routine',
+            prompt: '“Consolidate the weekly report files in this folder into one summary, and run it automatically every Monday morning.”',
+            results: [
+              'Merges multiple local documents and data files into your format',
+              'Generates a clean summary report with only the key points',
+              'Repeats weekly or monthly with scheduled runs (/schedule)'
+            ]
+          }
         ],
         heroTrackHeading: 'How the enterprise track differs from the individual track',
-        compLeftTitle: '\ud83d\udc64 Individual Track (for reference)',
+        compLeftTitle: '👤 Individual Track (for reference)',
         compLeftBody: 'Available immediately with a personal Google account. It runs on the same agent engine, but <strong>consumer terms apply and there are no admin controls or organization-level usage management.</strong>',
-        compRightTitle: '\ud83c\udfe2 Enterprise Track \u2014 The Recommended Path (Google Cloud / Gemini Enterprise)',
-        compRightBody: 'Designed for org-wide rollout. Employees sign in with <strong>corporate Google Cloud credentials</strong> and keep using the desktop app, IDE extensions, and CLI.<br/><br/>\u2022 Google Cloud Terms of Service (no training on customer code)<br/>\u2022 Centralized admin controls in the Cloud Console<br/>\u2022 Team-level pooled usage and spend limits',
+        compRightTitle: '🏢 Enterprise Track — The Recommended Path (Google Cloud / Gemini Enterprise)',
+        compRightBody: 'Designed for org-wide rollout. Employees sign in with <strong>corporate Google Cloud credentials</strong> and use the desktop app, IDE extensions, and CLI.<br/><br/>• Google Cloud Terms of Service (no training on customer files or code)<br/>• Centralized admin controls in the Cloud Console<br/>• Team-level pooled usage and spend limits',
 
-        s1Num: 'Section 01 \u2022 Core Workflow',
-        s1Title: 'Transparent Control: The "Plan \u2192 Act \u2192 Verify" Loop',
-        s1Intro: 'Enterprise teams stay in full architectural control without micromanaging keystrokes. Click each stage below to explore how engineers and agents collaborate:',
+        s1Num: 'Section 01 • Core Workflow',
+        s1Title: 'Simple, Transparent Control: The "Plan → Act → Verify" Loop',
+        s1Intro: 'You don’t need deep coding expertise to stay in full control. Every task follows a clear 3-step loop—you approve the direction, and the agent handles the building and visual verification.',
         steps: [
           {
-            name: '1. Plan (Blueprint Approval)',
-            sub: 'Review architecture before any file edits',
-            youTitle: '\ud83d\udc64 Engineer / Architect Role:',
-            youText: 'State your objective in natural language (text or voice) and review the generated <strong>Implementation Plan Artifact</strong>. Leave Google-Doc-style inline comments on specific lines to refine architectural choices before clicking <code>[Proceed]</code>.',
-            agentTitle: '\ud83e\udd16 Antigravity Agent Action:',
-            agentText: 'Analyzes repository dependencies and produces a structured Implementation Plan detailing target files, API changes, and verification steps before modifying a single line of code.',
-            exTitle: 'Example: Implementation Plan Inline Review',
-            exBody: `<b>Objective:</b> "Add regional filtering and streaming CSV export to the orders dashboard."<br/><br/>
-            <b>Proposed Implementation Plan:</b><br/>
-            \u2022 <code>OrderController.java</code>: Add region query filter and streaming CSV endpoint.<br/>
-            \u2022 <code>OrdersTable.tsx</code>: Add region selector dropdown and export button.<br/>
-            \u2022 <b>Verification Plan:</b> Run 6 JUnit tests and verify file export in the built-in browser.<br/><br/>
-            <span style="color:var(--g-blue);font-weight:600;">\ud83d\udcac Engineer Inline Comment: "Enforce YYYY-MM-DD formatting and reuse our internal AuthGuard annotation."</span>`
+            name: '1. Plan (Review the Approach)',
+            sub: 'Confirm the layout and steps before anything is built',
+            youTitle: '👤 Your Role (Planner · Business User · Engineer):',
+            youText: 'Describe what you want in plain language (by text or voice) and review the <strong>Plan</strong> drafted by the agent. Leave a quick comment on any line—just like in Google Docs—and click <code>[Proceed]</code> when ready.',
+            agentTitle: '🤖 Antigravity Agent Action:',
+            agentText: 'Reads your local files (such as an Excel sheet or brief) and proposes a clear, step-by-step Plan outlining the screens, charts, and verification steps before modifying any files.',
+            exTitle: 'Easy Example: Turning an Excel Sheet into an Interactive Dashboard & Slide Deck',
+            exBody: `<b>Your Request:</b> "Read our Q3 sales Excel file (sales_q3.xlsx) and build an interactive dashboard with region/product filters, plus a presentation slide view."<br/><br/>
+            <b>Proposed Plan by Agent:</b><br/>
+            • <b>Data Prep:</b> Parse regional, product, and monthly KPI rows from the spreadsheet<br/>
+            • <b>Screen Layout:</b> ① KPI summary cards, ② Interactive region/product filter & trend chart, ③ Full-screen dynamic slide mode<br/>
+            • <b>Verification Plan:</b> Open the completed page in the built-in browser to test all filters and slide transitions<br/><br/>
+            <span style="color:var(--g-blue);font-weight:600;">💬 Your Inline Comment: "Looks great! Use our corporate blue palette and add a 'Save Chart as Image' button."</span>`
           },
           {
-            name: '2. Act (Parallel Execution)',
-            sub: 'Multi-file edits, terminal builds & subagents',
-            youTitle: '\ud83d\udc64 Engineer / Architect Role:',
-            youText: 'Approve the plan and focus on high-level design while monitoring multiple parallel agents across workspaces in the <strong>Antigravity 2.0 Desktop App</strong>.',
-            agentTitle: '\ud83e\udd16 Antigravity Agent Action:',
-            agentText: 'Executes multi-file code changes, runs terminal builds and tests under admin-configured execution policies (native OS sandboxing is supported by default on macOS and Linux, and in Preview on Windows), self-corrects compiler errors, and spawns specialized <strong>Subagents</strong> for parallel subtasks.',
-            exTitle: 'Example: Subagent Delegation & Terminal Self-Healing',
-            exBody: `<b>Live Agent Execution Log:</b><br/>
-            \u2713 Updated <code>OrderController.java</code> and <code>OrdersTable.tsx</code><br/>
-            \u2713 <b>[Subagent: Test-Engineer]</b> Authored 6 boundary unit tests in <code>OrderExportTest.java</code><br/>
-            \u2713 Audited changes against team <code>SKILL.md</code> coding guidelines<br/>
-            \u2713 Terminal test suite result: <b>6/6 tests passing (BUILD SUCCESSFUL)</b>`
+            name: '2. Act (Autonomous Building)',
+            sub: 'The agent creates files, charts, and layouts automatically',
+            youTitle: '👤 Your Role (Planner · Business User · Engineer):',
+            youText: 'Once you approve the Plan, you can focus on your other work or casually glance at progress in the <strong>Antigravity 2.0 Desktop App</strong>.',
+            agentTitle: '🤖 Antigravity Agent Action:',
+            agentText: 'Generates the interactive HTML dashboard, connects your spreadsheet data, applies styling, and fixes any errors on its own. For larger tasks, it spawns helper <strong>Subagents</strong> to work in parallel.',
+            exTitle: 'Easy Example: Autonomous Dashboard Creation & Self-Check',
+            exBody: `<b>Live Agent Progress:</b><br/>
+            ✓ Parsed <code>sales_q3.xlsx</code> and aggregated regional & product metrics<br/>
+            ✓ Built interactive web dashboard (<code>dashboard.html</code>) and full-screen slide view<br/>
+            ✓ Applied corporate blue theme and 'Save Chart as Image' button<br/>
+            ✓ Self-check complete: <b>Zero missing data points · All charts rendered cleanly</b>`
           },
           {
-            name: '3. Verify (Browser Proof)',
-            sub: 'Live Chrome browser verification',
-            youTitle: '\ud83d\udc64 Engineer / Architect Role:',
-            youText: 'Review the final <strong>Walkthrough artifact</strong> alongside the code diff, test logs, and before/after screenshots and recordings. Draw a selection box directly on any screenshot to request visual UI adjustments.',
-            agentTitle: '\ud83e\udd16 Antigravity Agent Action:',
-            agentText: 'A <strong>browser subagent</strong> opens and controls a real Chrome browser in an isolated profile, navigates to the local app, clicks buttons, checks DOM rendering and console errors, and attaches screenshots and recordings as artifacts (requires Chrome and admin/user browser permissions).',
-            exTitle: 'Example: Automated Browser Verification',
-            exBody: `<b>Browser Verification Complete:</b><br/>
-            \ud83c\udf10 Navigated to <code>http://localhost:3000/orders</code> and verified region dropdown filter<br/>
-            \ud83d\uddb1\ufe0f Clicked 'Export CSV' \u2192 Verified HTTP 200 OK & <code>YYYY-MM-DD</code> formatting<br/>
-            \ud83d\udcf8 Captured verified UI screenshot (0 console errors)<br/><br/>
-            <span style="color:var(--g-green);font-weight:600;">\u2705 Verification Complete \u2014 Ready for final review and merge.</span>`
+            name: '3. Verify (Live Browser Proof)',
+            sub: 'Visual browser check & easy box-drawing feedback on screenshots',
+            youTitle: '👤 Your Role (Planner · Business User · Engineer):',
+            youText: 'Review the final <strong>Walkthrough summary</strong> along with screenshots and screen recordings. Want to tweak a chart or title? Simply <strong>draw a box directly on the screenshot</strong> with your mouse and tell the agent what to adjust.',
+            agentTitle: '🤖 Antigravity Agent Action:',
+            agentText: 'Opens a real <strong>Chrome browser</strong>, loads your new dashboard, clicks the dropdown filters and slide buttons to make sure everything works smoothly, and attaches screenshots and video proof.',
+            exTitle: 'Easy Example: Visual Browser Verification & Box Feedback',
+            exBody: `<b>Browser Verification Complete (Walkthrough):</b><br/>
+            🌐 Opened dashboard in Chrome and verified regional & product dropdown filters<br/>
+            🖱️ Tested 'Presentation Slide Mode' transition and 'Save Image' button<br/>
+            📸 Attached verified UI screenshots and screen recording<br/><br/>
+            <span style="color:var(--g-green);font-weight:600;">✅ Ready to Share — Or draw a box on any screenshot to request quick visual tweaks</span>`
           }
         ],
 
-        s2Num: 'Section 02 \u2022 Product Ecosystem & Commercial Scope',
-        s2Title: 'One Shared Agent Harness Across Four Surfaces',
-        s2Intro: 'Antigravity meets engineers where they already work. A single shared agent harness powers four distinct surfaces:',
+        s2Num: 'Section 02 • Product Ecosystem',
+        s2Title: 'One Shared Agent Engine Across Four Environments',
+        s2Intro: 'Whether you are a non-technical planner or a software engineer, Antigravity lets everyone work in their preferred environment:',
         surfaceTabs: [
           '1. Antigravity 2.0 (Desktop App)',
           '2. Native IDE Extensions',
@@ -1065,181 +1311,257 @@
         ],
         surfaces: [
           {
-            who: 'Best for: Orchestrating multiple agents in parallel, rapid prototyping, and cross-project supervision',
-            title: 'Antigravity 2.0 Desktop App (Agent Command Center)',
-            body: 'A standalone desktop application (macOS, Windows, Linux) that acts as the central command center for agent orchestration across multiple projects and Git worktrees\u2014without replacing your code editor.',
+            who: 'Best for: Planners, marketers, and business users building dashboards/slides without coding, plus lead engineers',
+            title: 'Antigravity 2.0 Desktop App (User-Friendly Agent Hub)',
+            body: 'A standalone desktop app (macOS, Windows, Linux) that anyone can install and use like a regular PC program—no coding setup required. Point it at a local folder with Excel files or documents and ask in plain language to create dashboards, dynamic HTML slides, or prototypes.',
             points: [
-              'Included in Gemini Enterprise (Standard, Plus, Pay-as-you-go) with an invoiced Cloud Billing account, under Google Cloud Terms of Service.',
-              'Project-grouped conversations with multi-folder and Git worktree boundary support.',
-              'Built-in voice dictation (/voice) and cron-based Scheduled Tasks (/schedule).'
+              'Accessible for everyone: built-in voice commands (/voice), screenshot box annotations, and scheduled tasks (/schedule).',
+              'Run and supervise multiple agents working in parallel across different folders or projects.',
+              'Included in Gemini Enterprise (Standard, Plus, Pay-as-you-go) under Google Cloud Terms of Service.'
             ]
           },
           {
-            who: 'Best for: Engineers staying inside VS Code, Visual Studio, JetBrains, Zed, or Xcode',
+            who: 'Best for: Software engineers staying inside VS Code, Visual Studio, JetBrains, Zed, or Xcode',
             title: 'Native IDE Extensions',
-            body: 'Keep your existing corporate IDE, keybindings, and configurations. Official extensions bring the Antigravity <strong>agent side panel</strong> directly into your standardized editors.',
+            body: 'Keep your existing corporate code editor, shortcuts, and plugins. Official extensions bring the Antigravity <strong>agent side panel</strong> directly into your familiar IDE.',
             points: [
-              'Supported editors & versions: VS Code (1.90+), Visual Studio 2026 (v17.8+ / .NET), JetBrains (2026.2.1+ \u2014 IntelliJ IDEA, PyCharm, WebStorm, GoLand, CLion, Rider), Zed (0.140.0+), and Xcode (27 beta 6+).',
-              'Enterprise (Gemini Enterprise) status: VS Code and Visual Studio supported; JetBrains, Zed, and Xcode in Preview.',
-              'Scope: extensions provide the agent side panel; they do not include in-editor inline Tab completion or standalone slash commands (/schedule, etc.).',
-              'Governed by Google Cloud Terms of Service when authenticated with a Gemini Enterprise license.'
+              'Supported editors: VS Code, Visual Studio 2026 (GA), JetBrains (IntelliJ, PyCharm, WebStorm, etc.), Zed, and Xcode (Preview).',
+              'Provides the full agent side-panel workflow without forcing teams to switch editors.',
+              'Governed by Google Cloud Terms of Service when signed in with Gemini Enterprise.'
             ]
           },
           {
-            who: 'Best for: Terminal-centric developers, DevOps engineers, and headless CI/CD automation',
-            title: 'Antigravity CLI (agy) \u2014 High-Velocity Terminal Surface',
-            body: 'Delivers the full Antigravity agent harness directly inside bash, zsh, or PowerShell without requiring a GUI.',
+            who: 'Best for: Backend/DevOps engineers and terminal automation workflows',
+            title: 'Antigravity CLI (agy) — Fast Terminal Interface',
+            body: 'Runs the same Antigravity agent directly inside bash, zsh, or PowerShell via the `agy` command without needing a graphical window.',
             points: [
-              'Bundled in Gemini Enterprise subscriptions; invoke immediately via the agy command with SSO, WIF, or Application Default Credentials (ADC).',
-              'Ideal for batch code migrations, automated build fixing, and headless CI/CD pipelines.',
-              'Shares identical Team Skills (SKILL.md), fine-grained permissions, slash commands, and MCP connectors with Antigravity 2.0.'
+              'Bundled with Gemini Enterprise; sign in with corporate credentials and run immediately.',
+              'Ideal for batch refactoring, automated test generation, and CI/CD build recovery.',
+              'Shares the exact same Team Skills (SKILL.md) and security policies as the desktop app.'
             ]
           },
           {
-            who: 'Best for: Platform engineering teams embedding stateful agents into internal tools',
+            who: 'Best for: Platform teams embedding custom agents into internal workflows',
             title: 'Antigravity Python SDK (google-antigravity)',
-            body: 'A programmatic Python SDK (pip install google-antigravity) for building and self-hosting custom stateful agents.',
+            body: 'A Python SDK (`pip install google-antigravity`) for building and embedding stateful agents into internal automation scripts.',
             points: [
-              'Build and embed agents directly in Python inside your own internal tools (connects via LocalAgentConfig(vertex=True)).',
-              'Enforce governance in code with declarative tool execution policies and pre-execution checks.',
-              'Runs on the Gemini Enterprise Agent Platform API (consumption-based, billed separately from seat subscriptions).',
-              'Powers custom internal compliance, code review, and optimization microservices.'
+              'Configure custom review and verification agents directly in Python.',
+              'Enforce tool execution permissions and pre-checks in code.',
+              'Runs on the Gemini Enterprise Agent Platform API (consumption-based billing).'
             ]
           }
         ],
-        surfaceCaveat: '<strong>\ud83d\udca1 Enterprise Deployment Note (Antigravity 2.0 vs. Consumer Antigravity IDE):</strong> The standalone <code>Antigravity IDE</code> editor (which includes inline Tab completion) is a consumer-only offering governed by Consumer Terms of Service and is not supported for enterprise deployments. Enterprise organizations deploy <strong>Antigravity 2.0 (Desktop App)</strong>, <strong>Native IDE Extensions</strong>, <strong>Antigravity CLI (<code>agy</code>)</strong>, and the <strong>Python SDK</strong> under Google Cloud Terms of Service.',
+        surfaceCaveat: '<strong>💡 Enterprise Deployment Note (Antigravity 2.0 vs. Consumer Antigravity IDE):</strong> The standalone <code>Antigravity IDE</code> editor is a consumer-only product and is not supported for enterprise rollout. Enterprise teams deploy <strong>① Antigravity 2.0 Desktop App</strong>, <strong>② Native IDE Extensions</strong>, <strong>③ Antigravity CLI (<code>agy</code>)</strong>, and <strong>④ Python SDK</strong> under Google Cloud Terms of Service.',
 
-        s3Num: 'Section 03 \u2022 Core Capabilities',
-        s3Title: 'Six Core Capabilities Built for Enterprise Engineering',
-        s3Intro: 'Designed to automate the complete software delivery lifecycle from initial spec alignment to visual browser proof:',
+        s3Num: 'Section 03 • Core Capabilities',
+        s3Title: 'Six Capabilities That Save Hours of Manual Work',
+        s3Intro: 'From turning spreadsheets into interactive visuals to verifying web apps in a live browser, Antigravity automates the full workflow:',
         features: [
           {
             num: '01', color: 'var(--g-blue)',
-            title: 'Parallel Multi-Agent Orchestration',
-            desc: 'Run multiple asynchronous agents concurrently across repositories\u2014refactoring backend APIs while another agent writes unit tests and a third updates documentation.'
+            title: 'Run Multiple Tasks in Parallel',
+            desc: 'No need to wait for one task to finish. While one agent turns an Excel sheet into a dashboard, another can build an HTML presentation deck or organize project files simultaneously.'
           },
           {
             num: '02', color: 'var(--g-green)',
-            title: 'Browser Actuation & Visual Verification',
-            desc: 'A browser subagent opens and controls a real Chrome browser in an isolated profile to click UI elements, fill forms, inspect console errors, and capture screenshots and recordings as proof (requires Chrome and admin/user browser permission).'
+            title: 'Live Chrome Browser Verification',
+            desc: 'A browser subagent opens a real Chrome window, clicks through your new dashboard or web app, checks for visual layout issues, and attaches screenshots and recordings as proof.'
           },
           {
             num: '03', color: 'var(--g-yellow)',
-            title: 'Inline Plan Comments & Screenshot Annotations',
-            desc: 'Leave Google-Doc-style inline comments on Implementation Plans or drag selection boxes directly onto browser screenshots for rapid visual adjustments.'
+            title: 'Doc-Style Comments & Screenshot Box Feedback',
+            desc: 'Comment directly on specific lines of a Plan, or draw a selection box over any screenshot with your mouse to tell the agent exactly which chart or button to adjust.'
           },
           {
             num: '04', color: 'var(--g-red)',
-            title: 'Specialized Subagent Delegation',
-            desc: 'The parent agent delegates deep codebase searches, test generation, and security audits to isolated subagents running in parallel without cluttering main context.'
+            title: 'Automatic Subagent Teamwork',
+            desc: 'For larger jobs, the main agent automatically delegates sub-tasks—such as data parsing, UI layout, and quality checks—to specialized helper subagents working in parallel.'
           },
           {
             num: '05', color: 'var(--g-blue)',
-            title: 'Voice Input (/voice) & Cron Scheduling (/schedule)',
-            desc: 'In Antigravity 2.0 and the CLI, dictate complex architecture specs via microphone or schedule recurring cron tasks so agents automatically triage overnight logs and build failures.'
+            title: 'Voice Direction (/voice) & Scheduled Runs (/schedule)',
+            desc: 'Speak naturally into your microphone (/voice) instead of typing long prompts, or set up recurring schedules (/schedule) to compile weekly folder summaries automatically.'
           },
           {
             num: '06', color: 'var(--g-green)',
-            title: 'Team Skills (SKILL.md), MCP & Slash Commands',
-            desc: 'Codify team standards in .agents/skills/*/SKILL.md folders, connect internal trackers/DBs via Model Context Protocol (MCP), and run /learn, /grill-me, /goal, and /plan workflows in Antigravity 2.0 and the CLI.'
+            title: 'Reusable Team Templates & Skills (SKILL.md)',
+            desc: 'Save your company’s dashboard design theme, slide layout rules, or coding standards in a SKILL.md file so every team member gets consistent, on-brand results automatically.'
           }
         ],
 
-        s4Num: 'Section 04 \u2022 Technical Architecture & Enterprise Security',
-        s4Title: '3-Layer Architecture & Google Cloud Admin Governance',
-        s4Intro: 'Co-optimized with Gemini 3 models on Google AI Hypercomputer TPUs and governed centrally from the Google Cloud Console. Click each layer below to inspect controls:',
+        s4Num: 'Section 04 • Architecture & Security',
+        s4Title: 'Three-Layer Architecture & Central Google Cloud Security',
+        s4Intro: 'Easy for employees to use, and simple for IT administrators to govern from a single Google Cloud Console. Click each layer below for details:',
         tiers: [
           {
-            title: 'Layer 1 \u2022 Developer & Builder Surfaces (Cloud Identity / WIF & GCP Project Auth)',
-            badge: 'Unified Access',
-            chips: ['Antigravity 2.0 Desktop App', 'VS Code / Visual Studio / JetBrains(Preview) / Zed(Preview) / Xcode(Preview)', 'Antigravity CLI (agy)', 'Python SDK (Agent Platform)'],
-            explanation: '<strong>[Layer 1 \u2014 Enterprise Identity, IAM Roles & Provisioning]</strong> Users authenticate with corporate Google Cloud credentials (SSO or Workforce Identity Federation / BYOID).<br/>\u2022 <strong>Required IAM Roles & API Pre-Enablement:</strong> Admins require <code>Gemini Enterprise Admin (roles/discoveryengine.agentspaceAdmin)</code> to configure settings, while every tool user (including admins) must explicitly be granted <code>Gemini Enterprise User (roles/discoveryengine.agentspaceUser)</code>. Enable <code>aiplatform.googleapis.com</code> and wait ~5 minutes before purchasing licenses to prevent provisioning failures.'
+            title: 'Layer 1 • User Environments & Corporate Single Sign-On (SSO / Cloud Identity)',
+            badge: 'Unified Sign-In',
+            chips: ['Antigravity 2.0 Desktop App', 'VS Code / Visual Studio / JetBrains Extensions', 'Antigravity CLI (agy)', 'Python SDK'],
+            explanation: '<strong>[Layer 1 — Sign In with Your Corporate Account]</strong> Employees sign in with their existing <strong>corporate Google Cloud / SSO credentials</strong>—no separate personal accounts needed. Admins easily assign or revoke access (`Gemini Enterprise User` role) by team in the Cloud Console.'
           },
           {
-            title: 'Layer 2 \u2022 Shared Agent Harness & Admin Coding Controls (Google Cloud Console)',
+            title: 'Layer 2 • Central Admin Security Guardrails (Google Cloud Console)',
             badge: 'Admin Security Controls',
-            chips: ['Outside-of-folder file access (Deny / Always ask / Allow)', 'Terminal auto-execution mode & Sandbox mode toggles', 'OS-level sandbox (macOS & Linux / Windows Preview)', 'Browser URL, JS execution & MCP server allowlists'],
-            explanation: '<strong>[Layer 2 \u2014 Admin Coding Controls]</strong> Configured centrally in the Google Cloud Console under <code>Gemini Enterprise \u203a Settings \u203a AI developer tools</code>:<br/>\u2022 <strong>Outside-of-folder file access:</strong> choose <code>Deny</code> (initial first-time default), <code>Always ask</code>, or <code>Allow</code> to control access outside the project workspace.<br/>\u2022 <strong>Terminal execution vs. Sandbox mode defaults:</strong> in the Cloud Console, <code>Terminal auto-execution mode</code> (defaults to <code>Always proceed</code>) and <code>Sandbox mode</code> (separate toggle, defaults to <code>Disabled</code>) are configured independently. Admins should explicitly enable <code>Sandbox mode</code> and select <code>Proceed in sandbox</code> or <code>Require review</code> before rollout (native OS sandboxing is supported on macOS/Linux and in Preview on Windows).<br/>\u2022 <strong>Browser, MCP & Audit Logging:</strong> <code>Browser access</code>, <code>Browser JavaScript auto-execution</code>, <code>MCP servers</code>, and <code>Prompts and responses logging</code> all default to <code>Disabled</code> and must be explicitly enabled by admins as needed.'
+            chips: ['Block outside-of-folder file access (Default: Deny)', 'Terminal & OS sandbox controls', 'Allowed browser URL list', 'Audit logging'],
+            explanation: '<strong>[Layer 2 — Organization-Wide Guardrails]</strong> Security administrators configure policies centrally in the Google Cloud Console:<br/>• <strong>Folder Boundary Protection:</strong> By default (`Deny`), agents cannot read files outside the specific project folder opened by the user.<br/>• <strong>Execution & Browser Governance:</strong> Admins control command execution rules, OS sandboxing, and which URLs the browser agent is allowed to visit.'
           },
           {
-            title: 'Layer 3 \u2022 Gemini 3 Model Family & Enterprise Data Protection (Google Cloud ToS)',
+            title: 'Layer 3 • Google Gemini 3 Models & Enterprise Data Privacy (Google Cloud ToS)',
             badge: 'Models & Data Privacy',
-            chips: ['Gemini 3.1 Pro (Deep Reasoning)', 'Gemini 3.8 / 3.7 / 3.6 Flash (High Speed)', 'global / us / eu Regional Endpoints', 'No Training on Customer Data (GCP ToS) \u00b7 VPC Service Controls'],
-            explanation: '<strong>[Layer 3 \u2014 Google Model Support & Data Sovereignty]</strong> Gemini Enterprise AI developer tools support <strong>Google-made models only</strong>: <strong>Gemini 3.1 Pro</strong> for deep reasoning and <strong>Gemini 3.8 / 3.7 / 3.6 Flash</strong> for high-speed execution (plus <code>Gemini Flash Lite</code> for background tasks and <code>Gemini 3 Pro Image</code> on <code>global</code>; third-party models such as Claude 4.6 and GPT-OSS-120b are not available on Enterprise).<br/>\u2022 <strong>Data protection:</strong> under the <strong>Google Cloud Terms of Service</strong>, customer code, prompts, and logs are <strong>never used to train Google foundation models or reviewed by humans</strong>, and enterprise prompts, responses, code, and telemetry are not stored outside your organization\u2019s Google Cloud environment.<br/>\u2022 <strong>Regional endpoints & network boundaries:</strong> select <code>global</code>, <code>us</code>, or <code>eu</code> endpoints (image generation and preview models are <code>global</code> only) and combine with <strong>VPC Service Controls</strong> and request/response audit logging.'
+            chips: ['Gemini 3.1 Pro (Complex Design & Reasoning)', 'Gemini 3.8 / 3.7 / 3.6 Flash (Fast Building)', 'Zero Training on Customer Data (GCP ToS)', 'Global / US / EU Data Residency'],
+            explanation: '<strong>[Layer 3 — Trusted Google Models & Strict Data Protection]</strong> Powered exclusively by Google’s <strong>Gemini 3.1 Pro</strong> and high-speed <strong>Gemini 3.8 / 3.7 / 3.6 Flash</strong> models.<br/>• <strong>Zero Data Training:</strong> Under the <strong>Google Cloud Terms of Service</strong>, your spreadsheets, documents, code, and prompts are <strong>never used to train AI models or reviewed by humans</strong>, and remain strictly within your organization’s Google Cloud boundary.'
           }
         ],
 
-        s5Num: 'Section 05 \u2022 Before You Adopt',
-        s5Title: 'How Cost Works, and Four Things Worth Checking',
-        s5Intro: 'Available with Gemini Enterprise (Standard, Plus, or Pay-as-you-go; requires an invoiced Cloud Billing account), with seat quotas pooled weekly at the project level.',
+        s5Num: 'Section 05 • Before You Adopt',
+        s5Title: 'How Usage Pooling Works, and Key Points to Check',
+        s5Intro: 'Included with Gemini Enterprise (Standard, Plus, or Pay-as-you-go), with team usage pooled weekly at the project level for predictable budgeting.',
         values: [
           {
-            metric: 'Weekly Shared Pool (Standard & Plus)',
+            metric: 'Weekly Team Shared Pool (Standard & Plus)',
             color: 'var(--g-blue)',
-            desc: 'Standard ($10/user/mo credit) and Plus ($15/user/mo credit) combine seat allocations into a rolling 7-day project pool (monthly value \u00f7 4 \u00d7 seats; no weekly rollover). The Pay-as-you-go edition has no included pool and bills per consumption.'
+            desc: 'Included usage credits in Standard ($10/user/mo value) and Plus ($15/user/mo value) are pooled weekly across all licensed seats in your project—so heavy and light users balance each other out.'
           },
           {
-            metric: 'Pick the Right Gemini 3 Model',
+            metric: 'Smart Gemini 3 Model Selection',
             color: 'var(--g-green)',
-            desc: 'Use Gemini 3.1 Pro for deep design work and lighter Gemini 3.8 / 3.7 / 3.6 Flash models for routine edits and test runs (note: background tasks use Gemini Flash Lite and image generation uses Gemini 3 Pro Image, which can incur usage charges).'
+            desc: 'Use Gemini 3.1 Pro for initial dashboard or architecture design, and switch to fast, economical Gemini 3.8 / 3.7 / 3.6 Flash models for everyday edits and quick tasks.'
           },
           {
-            metric: 'Overage Toggle & Monthly Spend Caps',
+            metric: 'No Surprise Overages & Spend Caps',
             color: 'var(--g-yellow)',
-            desc: 'On Standard and Plus, usage stops when the weekly pool is exhausted unless an admin enables overages. You can set a monthly Vertex AI spend cap in Cloud Billing (note: stopping usage can take a few minutes to take effect, so minor charges past the cap may occur).'
+            desc: 'Usage pauses automatically if the weekly pool is reached—preventing unexpected bills. Admins can optionally enable overages and set a monthly project spend cap.'
           }
         ],
-        tableHeaders: ['What to Check', 'How Antigravity Handles It'],
+        tableHeaders: ['What to Check', 'How Antigravity Works'],
         tableRows: [
           [
-            '<strong>Can we actually review what the agent did?</strong>',
-            'Implementation Plans, code diffs, browser screenshots and recordings, and Walkthrough reports are all saved as artifacts, and you can leave inline comments on any of them to request changes.'
+            '<strong>Is it easy for non-developers to use?</strong>',
+            'Yes. With the <strong>Antigravity 2.0 Desktop App</strong>, planners and business users simply select a folder with Excel sheets or documents and describe what they want in plain language to create interactive dashboards, HTML slides, or prototypes.'
           ],
           [
-            '<strong>Can we keep our existing setup?</strong>',
-            'A standalone desktop app (Antigravity 2.0), official IDE extensions (VS Code & Visual Studio supported; JetBrains, Zed & Xcode in Preview), and a terminal CLI (agy) let each team work where it is comfortable.'
+            '<strong>Can we easily review and refine what the agent makes?</strong>',
+            'Every task produces a clear Plan before starting and a visual Walkthrough report with browser screenshots and recordings afterward. You can draw a box on any screenshot to request visual changes.'
           ],
           [
-            '<strong>Do we have to re-explain team standards every time?</strong>',
-            'Commit your coding conventions and release workflows into <code>.agents/skills/*/SKILL.md</code> and project rules in your repository so every teammate\u2019s agent follows the same standard.'
+            '<strong>Do we have to repeat our design or coding rules every time?</strong>',
+            'Save your team’s preferred dashboard theme, slide template, or coding standards once in a <code>SKILL.md</code> file, and every agent will follow the same standard automatically.'
           ],
           [
-            '<strong>Can we govern it centrally?</strong>',
-            'Users sign in with corporate accounts (Cloud Identity / WIF), and admins centrally configure file access, terminal auto-execution and sandboxing toggles, browser URL/MCP allowlists, and audit logging in Cloud Console.'
+            '<strong>Can IT govern security centrally?</strong>',
+            'Users log in with corporate SSO, and admins centrally control folder access boundaries, command execution, allowed browser URLs, and audit logs in Google Cloud Console.'
           ]
         ],
 
-        s6Num: 'Section 06 \u2022 Frequently Asked Questions',
+        s6Num: 'Section 06 • Frequently Asked Questions',
         s6Title: 'Four Questions That Come Up Most Often',
-        s6Intro: 'Key answers and enterprise caveats verified against official Antigravity and Google Cloud documentation.',
+        s6Intro: 'Clear answers based on official Google Antigravity and Gemini Enterprise documentation.',
         factHeaders: ['Question', 'Summary', 'Answer', 'Official Docs'],
         factRows: [
           [
-            '<strong>How is this different from using personal accounts?</strong>',
-            '<span class="verdict-badge verdict-caveat">Shared Core \u00b7 Scope Differences</span>',
-            'Both share the core agent harness, but differ in governance and surface/model scope. Enterprise adds Google Cloud ToS, Cloud Console admin controls, and project-pooled quotas across Antigravity 2.0, IDE extensions, CLI, and SDK\u2014while excluding the consumer-only standalone <code>Antigravity IDE</code> (and its inline Tab autocomplete) and third-party models (Claude 4.6 / GPT-OSS-120b).',
-            '<a href="https://antigravity.google/docs/enterprise" target="_blank" rel="noopener noreferrer">Enterprise Docs</a> \u00b7 <a href="https://antigravity.google/pricing" target="_blank" rel="noopener noreferrer">Plans</a>'
+            '<strong>How is this different from personal accounts?</strong>',
+            '<span class="verdict-badge verdict-caveat">Enterprise ToS & Central Controls</span>',
+            'Enterprise adds the <strong>Google Cloud Terms of Service (no training on your data)</strong>, Cloud Console admin security guardrails, and project-pooled weekly quotas across Antigravity 2.0, IDE extensions, CLI, and SDK.',
+            '<a href="https://antigravity.google/docs/enterprise" target="_blank" rel="noopener noreferrer">Enterprise Docs</a> · <a href="https://antigravity.google/pricing" target="_blank" rel="noopener noreferrer">Plans</a>'
           ],
           [
             '<strong>What is included with Gemini Enterprise?</strong>',
-            '<span class="verdict-badge verdict-caveat">3 Surfaces + SDK (Invoiced Billing)</span>',
-            'With an invoiced Cloud Billing account, Gemini Enterprise (Standard: $10/user/mo credit; Plus: $15/user/mo credit pooled weekly; Pay-as-you-go: consumption-based) includes Antigravity 2.0, official IDE extensions, and the CLI. The Python SDK is billed by consumption on Agent Platform. Users must be granted the <code>Gemini Enterprise User</code> IAM role.',
-            '<a href="https://docs.cloud.google.com/gemini/enterprise/docs/ai-developer-tools-overview" target="_blank" rel="noopener noreferrer">Cloud AI Dev Tools</a> \u00b7 <a href="https://docs.cloud.google.com/gemini/enterprise/docs/quotas-and-overages" target="_blank" rel="noopener noreferrer">Quotas & Overages</a>'
+            '<span class="verdict-badge verdict-caveat">Desktop App · IDE Extensions · CLI</span>',
+            'Gemini Enterprise (Standard: $10/user/mo credit; Plus: $15/user/mo credit pooled weekly; PayGo: consumption-based) includes the Antigravity 2.0 Desktop App, official IDE extensions, and the CLI.',
+            '<a href="https://docs.cloud.google.com/gemini/enterprise/docs/ai-developer-tools-overview" target="_blank" rel="noopener noreferrer">Cloud AI Dev Tools</a> · <a href="https://docs.cloud.google.com/gemini/enterprise/docs/quotas-and-overages" target="_blank" rel="noopener noreferrer">Quotas & Overages</a>'
           ],
           [
             '<strong>Which AI models does it use?</strong>',
             '<span class="verdict-badge verdict-true">Google Gemini 3 Models Only</span>',
-            'Enterprise supports Google-made models: <strong>Gemini 3.1 Pro</strong> for deep reasoning and <strong>Gemini 3.8 / 3.7 / 3.6 Flash</strong> for fast execution (plus <code>Gemini Flash Lite</code> for background tasks and <code>Gemini 3 Pro Image</code> on <code>global</code>). Third-party models (Claude Sonnet/Opus 4.6, GPT-OSS-120b) are available on Individual plans only.',
+            'Enterprise runs exclusively on Google-made models: <strong>Gemini 3.1 Pro</strong> for deep reasoning and <strong>Gemini 3.8 / 3.7 / 3.6 Flash</strong> for fast execution, ensuring unified security and data governance.',
             '<a href="https://antigravity.google/docs/models" target="_blank" rel="noopener noreferrer">Official Models Docs</a>'
           ],
           [
-            '<strong>Is our code used to train models?</strong>',
-            '<span class="verdict-badge verdict-true">Not Used for Training</span>',
-            'Under the Google Cloud Terms of Service, customer code, prompts, and agent logs are never used to train foundation models or reviewed by humans. Data location can be set to Global, US, or EU (image generation is Global only), with support for VPC Service Controls.',
+            '<strong>Are our spreadsheets, documents, or code used to train models?</strong>',
+            '<span class="verdict-badge verdict-true">Never Used for Training</span>',
+            'Under the Google Cloud Terms of Service, your files, data, code, and prompts are never used to train models or reviewed by humans, with support for Global, US, or EU data residency.',
             '<a href="https://cloud.google.com/terms" target="_blank" rel="noopener noreferrer">Google Cloud Terms of Service</a>'
           ]
         ]
       }
+    };
+
+    const ucVisuals = {
+      dashboard: '<svg viewBox="0 0 430 236" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive dashboard preview">' +
+        '<rect x="8" y="8" width="414" height="220" rx="12" fill="#ffffff" stroke="#dadce0"/>' +
+        '<path d="M8 20a12 12 0 0 1 12-12h390a12 12 0 0 1 12 12v18H8z" fill="#f1f3f4"/>' +
+        '<circle cx="26" cy="23" r="4" fill="#EA4335"/><circle cx="40" cy="23" r="4" fill="#FBBC04"/><circle cx="54" cy="23" r="4" fill="#34A853"/>' +
+        '<rect x="70" y="16" width="200" height="14" rx="7" fill="#ffffff" stroke="#dadce0"/>' +
+        '<rect x="24" y="54" width="118" height="42" rx="8" fill="#f0f6ff" stroke="#d2e3fc"/>' +
+        '<rect x="34" y="64" width="40" height="6" rx="3" fill="#9ab8f0"/><rect x="34" y="76" width="66" height="10" rx="4" fill="#1a73e8"/>' +
+        '<rect x="156" y="54" width="118" height="42" rx="8" fill="#eef9f1" stroke="#ceead6"/>' +
+        '<rect x="166" y="64" width="40" height="6" rx="3" fill="#8fc6a4"/><rect x="166" y="76" width="54" height="10" rx="4" fill="#188038"/>' +
+        '<rect x="288" y="54" width="118" height="42" rx="8" fill="#fef7e0" stroke="#feefc3"/>' +
+        '<rect x="298" y="64" width="40" height="6" rx="3" fill="#dfb974"/><rect x="298" y="76" width="60" height="10" rx="4" fill="#b06000"/>' +
+        '<rect x="24" y="110" width="58" height="18" rx="9" fill="#1a73e8"/><rect x="90" y="110" width="52" height="18" rx="9" fill="#ffffff" stroke="#dadce0"/><rect x="150" y="110" width="46" height="18" rx="9" fill="#ffffff" stroke="#dadce0"/>' +
+        '<line x1="24" y1="204" x2="406" y2="204" stroke="#e8eaed" stroke-width="2"/>' +
+        '<rect x="44" y="164" width="30" height="40" rx="4" fill="#aecbfa"><animate attributeName="height" values="0;40" dur="0.9s" fill="freeze"/><animate attributeName="y" values="204;164" dur="0.9s" fill="freeze"/></rect>' +
+        '<rect x="104" y="146" width="30" height="58" rx="4" fill="#4285F4"><animate attributeName="height" values="0;58" dur="1.05s" fill="freeze"/><animate attributeName="y" values="204;146" dur="1.05s" fill="freeze"/></rect>' +
+        '<rect x="164" y="176" width="30" height="28" rx="4" fill="#aecbfa"><animate attributeName="height" values="0;28" dur="0.8s" fill="freeze"/><animate attributeName="y" values="204;176" dur="0.8s" fill="freeze"/></rect>' +
+        '<rect x="224" y="134" width="30" height="70" rx="4" fill="#1a73e8"><animate attributeName="height" values="0;70" dur="1.2s" fill="freeze"/><animate attributeName="y" values="204;134" dur="1.2s" fill="freeze"/></rect>' +
+        '<rect x="284" y="158" width="30" height="46" rx="4" fill="#aecbfa"><animate attributeName="height" values="0;46" dur="0.95s" fill="freeze"/><animate attributeName="y" values="204;158" dur="0.95s" fill="freeze"/></rect>' +
+        '<rect x="344" y="150" width="30" height="54" rx="4" fill="#34A853"><animate attributeName="height" values="0;54" dur="1.1s" fill="freeze"/><animate attributeName="y" values="204;150" dur="1.1s" fill="freeze"/></rect>' +
+        '</svg>',
+
+      slides: '<svg viewBox="0 0 430 236" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dynamic HTML slide preview">' +
+        '<rect x="34" y="16" width="362" height="176" rx="12" fill="#ffffff" stroke="#dadce0"/>' +
+        '<path d="M34 28a12 12 0 0 1 12-12h338a12 12 0 0 1 12 12v10H34z" fill="#f1f3f4"/>' +
+        '<rect x="58" y="58" width="150" height="14" rx="7" fill="#202124"/>' +
+        '<rect x="58" y="84" width="118" height="8" rx="4" fill="#dadce0"/>' +
+        '<rect x="58" y="102" width="132" height="8" rx="4" fill="#dadce0"/>' +
+        '<rect x="58" y="120" width="96" height="8" rx="4" fill="#dadce0"/>' +
+        '<rect x="58" y="146" width="74" height="20" rx="10" fill="#1a73e8"/>' +
+        '<circle cx="300" cy="112" r="46" fill="none" stroke="#e8eaed" stroke-width="14"/>' +
+        '<circle cx="300" cy="112" r="46" fill="none" stroke="#4285F4" stroke-width="14" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="96" transform="rotate(-90 300 112)">' +
+        '<animate attributeName="stroke-dashoffset" values="289;96" dur="1.2s" fill="freeze"/></circle>' +
+        '<circle cx="300" cy="112" r="46" fill="none" stroke="#FBBC04" stroke-width="14" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="245" transform="rotate(150 300 112)">' +
+        '<animate attributeName="stroke-dashoffset" values="289;245" dur="1.2s" fill="freeze"/></circle>' +
+        '<circle cx="185" cy="214" r="5" fill="#1a73e8"/><circle cx="205" cy="214" r="5" fill="#dadce0"/><circle cx="225" cy="214" r="5" fill="#dadce0"/>' +
+        '<path d="M262 208l12 6-12 6z" fill="#5f6368"><animate attributeName="opacity" values="0.35;1;0.35" dur="1.8s" repeatCount="indefinite"/></path>' +
+        '</svg>',
+
+      prototype: '<svg viewBox="0 0 430 236" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Clickable prototype preview">' +
+        '<rect x="20" y="24" width="116" height="188" rx="14" fill="#ffffff" stroke="#dadce0" stroke-dasharray="6 5"/>' +
+        '<rect x="36" y="44" width="52" height="8" rx="4" fill="#9aa0a6"/>' +
+        '<rect x="36" y="66" width="84" height="20" rx="5" fill="#f1f3f4" stroke="#dadce0"/>' +
+        '<rect x="36" y="94" width="84" height="20" rx="5" fill="#f1f3f4" stroke="#dadce0"/>' +
+        '<rect x="36" y="122" width="84" height="20" rx="5" fill="#f1f3f4" stroke="#dadce0"/>' +
+        '<rect x="36" y="158" width="84" height="26" rx="13" fill="#1a73e8"/>' +
+        '<path d="M56 171h30M80 166l7 5-7 5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" fill="none"/>' +
+        '<path d="M156 118h58" stroke="#5f6368" stroke-width="2.5" stroke-linecap="round"/><path d="M208 111l10 7-10 7z" fill="#5f6368"/>' +
+        '<text x="185" y="104" text-anchor="middle" font-family="Roboto Mono, monospace" font-size="11" fill="#5f6368">MVP</text>' +
+        '<rect x="238" y="24" width="116" height="188" rx="14" fill="#ffffff" stroke="#1a73e8"/>' +
+        '<path d="M238 40a14 14 0 0 1 14-14h88a14 14 0 0 1 14 14v10H238z" fill="#f0f6ff"/>' +
+        '<circle cx="296" cy="102" r="26" fill="#eef9f1" stroke="#ceead6"/>' +
+        '<path d="M285 102l8 8 16-17" stroke="#188038" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<rect x="262" y="146" width="68" height="8" rx="4" fill="#dadce0"/><rect x="274" y="164" width="44" height="8" rx="4" fill="#e8eaed"/>' +
+        '<rect x="262" y="184" width="68" height="18" rx="9" fill="#e8f0fe"/>' +
+        '<path d="M330 176c6 4 10 8 12 14l-6-1-2 7-6-11-5 4z" fill="#202124"><animate attributeName="opacity" values="0.25;1;0.25" dur="1.9s" repeatCount="indefinite"/></path>' +
+        '</svg>',
+
+      report: '<svg viewBox="0 0 430 236" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Automated report preview">' +
+        '<rect x="24" y="34" width="62" height="78" rx="8" fill="#ffffff" stroke="#dadce0"/>' +
+        '<rect x="34" y="50" width="34" height="6" rx="3" fill="#dadce0"/><rect x="34" y="64" width="42" height="6" rx="3" fill="#e8eaed"/><rect x="34" y="78" width="28" height="6" rx="3" fill="#e8eaed"/>' +
+        '<rect x="44" y="58" width="62" height="78" rx="8" fill="#ffffff" stroke="#dadce0"/>' +
+        '<rect x="54" y="74" width="34" height="6" rx="3" fill="#dadce0"/><rect x="54" y="88" width="42" height="6" rx="3" fill="#e8eaed"/><rect x="54" y="102" width="28" height="6" rx="3" fill="#e8eaed"/>' +
+        '<rect x="64" y="82" width="62" height="78" rx="8" fill="#ffffff" stroke="#dadce0"/>' +
+        '<rect x="74" y="98" width="34" height="6" rx="3" fill="#aecbfa"/><rect x="74" y="112" width="42" height="6" rx="3" fill="#e8eaed"/><rect x="74" y="126" width="28" height="6" rx="3" fill="#e8eaed"/>' +
+        '<path d="M148 118h56" stroke="#5f6368" stroke-width="2.5" stroke-linecap="round"/><path d="M198 111l10 7-10 7z" fill="#5f6368"/>' +
+        '<rect x="228" y="26" width="140" height="184" rx="10" fill="#ffffff" stroke="#1a73e8"/>' +
+        '<rect x="248" y="50" width="76" height="10" rx="5" fill="#202124"/>' +
+        '<rect x="248" y="72" width="100" height="7" rx="3.5" fill="#dadce0"/><rect x="248" y="88" width="88" height="7" rx="3.5" fill="#dadce0"/>' +
+        '<rect x="248" y="112" width="100" height="46" rx="6" fill="#f0f6ff" stroke="#d2e3fc"/>' +
+        '<rect x="260" y="136" width="14" height="14" rx="2" fill="#aecbfa"/><rect x="282" y="126" width="14" height="24" rx="2" fill="#4285F4"/><rect x="304" y="132" width="14" height="18" rx="2" fill="#aecbfa"/><rect x="326" y="120" width="14" height="30" rx="2" fill="#34A853"/>' +
+        '<rect x="248" y="172" width="64" height="7" rx="3.5" fill="#e8eaed"/>' +
+        '<circle cx="356" cy="196" r="22" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>' +
+        '<path d="M356 184v13l9 5" stroke="#1a73e8" stroke-width="2.5" stroke-linecap="round" fill="none">' +
+        '<animateTransform attributeName="transform" type="rotate" from="0 356 196" to="360 356 196" dur="6s" repeatCount="indefinite"/></path>' +
+        '</svg>'
     };
 
     function renderAll() {
@@ -1270,12 +1592,47 @@
 
           <div class="concept-comparison-box">
             <div class="concept-col highlight">
-              <h3><span style="color:var(--g-blue);">\u2726</span> ${c.compRightTitle}</h3>
+              <h3><span style="color:var(--g-blue);">✦</span> ${c.compRightTitle}</h3>
               <p>${c.compRightBody}</p>
             </div>
             <div class="concept-col">
-              <h3><span style="color:var(--text-muted);">\u25cb</span> ${c.compLeftTitle}</h3>
+              <h3><span style="color:var(--text-muted);">○</span> ${c.compLeftTitle}</h3>
               <p>${c.compLeftBody}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- USE CASES -->
+        <section class="chapter" id="usecases">
+          <div class="chapter-number">${c.ucNum}</div>
+          <h2>${c.ucTitle}</h2>
+          <p class="section-intro">${c.ucIntro}</p>
+
+          <div class="usecase-layout">
+            <div class="usecase-list">
+              ${c.useCases.map((u, i) => `
+                <button class="usecase-card ${i === activeUseCase ? 'active' : ''}" onclick="setUseCase(${i})">
+                  <span class="uc-icon">${u.icon}</span>
+                  <span>
+                    <span class="uc-name">${u.name}</span>
+                    <span class="uc-sub">${u.sub}</span>
+                  </span>
+                </button>
+              `).join('')}
+            </div>
+
+            <div class="usecase-preview">
+              <div class="usecase-visual">
+                ${ucVisuals[c.useCases[activeUseCase].visual]}
+              </div>
+              <div class="usecase-body">
+                <div class="uc-label">${c.ucPromptLabel}</div>
+                <div class="uc-prompt">${c.useCases[activeUseCase].prompt}</div>
+                <div class="uc-label">${c.ucResultLabel}</div>
+                <ul class="uc-results">
+                  ${c.useCases[activeUseCase].results.map(r => `<li><span>${r}</span></li>`).join('')}
+                </ul>
+              </div>
             </div>
           </div>
         </section>
@@ -1336,7 +1693,7 @@
               <p style="font-size:14.5px;color:var(--text-body);">${c.surfaces[activeSurface].body}</p>
             </div>
             <div style="background:var(--bg-surface);border:1px solid var(--border-std);border-radius:12px;padding:18px 20px;">
-              <div style="font-weight:700;font-size:13.5px;margin-bottom:8px;color:var(--text-main);">${currentLang === 'ko' ? '\ud575\uc2ec \ud2b9\uc9d5 \ubc0f \ub77c\uc774\uc120\uc2a4 \uae30\uc900:' : 'Key Highlights & Licensing:'}</div>
+              <div style="font-weight:700;font-size:13.5px;margin-bottom:8px;color:var(--text-main);">${currentLang === 'ko' ? '핵심 특징 및 라이선스 기준:' : 'Key Highlights & Licensing:'}</div>
               <ul style="padding-left:18px;font-size:13.5px;color:var(--text-body);display:flex;flex-direction:column;gap:8px;">
                 ${c.surfaces[activeSurface].points.map(p => `<li>${p}</li>`).join('')}
               </ul>
@@ -1464,6 +1821,11 @@
       document.querySelectorAll('[data-ko]').forEach(el => {
         el.textContent = el.getAttribute('data-' + lang);
       });
+      renderAll();
+    }
+
+    function setUseCase(idx) {
+      activeUseCase = idx;
       renderAll();
     }
 
